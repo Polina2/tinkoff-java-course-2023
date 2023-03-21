@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 
 public final class GitHubLinkParser extends LinkParser{
 
+    private static final String pattern =
+            "^(https://github\\.com/)([a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}/([\\w.-]+))(.*)";
+
     public GitHubLinkParser(LinkParser successor) {
         this.successor = successor;
     }
@@ -15,9 +18,7 @@ public final class GitHubLinkParser extends LinkParser{
 
     @Override
     public String parse(String link) {
-        Pattern p = Pattern.compile(
-                "^(https://github\\.com/)([a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}/([\\w.-]+))(.*)"
-        );
+        Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(link);
         if (m.find()) {
             return m.group(2);

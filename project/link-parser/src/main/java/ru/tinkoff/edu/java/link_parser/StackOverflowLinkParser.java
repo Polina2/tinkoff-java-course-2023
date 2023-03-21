@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 public final class StackOverflowLinkParser extends LinkParser{
 
+    private static final String pattern = "^(https://stackoverflow\\.com/questions/)(\\d{1,8})(.*)";
+
     public StackOverflowLinkParser(LinkParser successor) {
         this.successor = successor;
     }
@@ -15,7 +17,7 @@ public final class StackOverflowLinkParser extends LinkParser{
 
     @Override
     public String parse(String link) {
-        Pattern p = Pattern.compile("^(https://stackoverflow\\.com/questions/)(\\d{1,8})(.*)");
+        Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(link);
         if (m.find()){
             return m.group(2);
