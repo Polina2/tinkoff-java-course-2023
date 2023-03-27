@@ -1,5 +1,7 @@
 app:
   test: it works
+  scheduler:
+    interval: 10000
 
 springdoc:
   swagger-ui:

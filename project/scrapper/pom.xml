@@ -17,8 +17,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>19</maven.compiler.source>
+    <maven.compiler.target>19</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -31,7 +31,7 @@
 	
 	<dependency>
 	  <groupId>org.springframework.boot</groupId>
-	  <artifactId>spring-boot-starter-web</artifactId>
+	  <artifactId>spring-boot-starter-webflux</artifactId>
 	  <version>3.0.4</version>
 	</dependency>
 	<dependency>
