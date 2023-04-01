@@ -2,6 +2,8 @@ app:
   test: it works
   scheduler:
     interval: 10000
+  gitBaseUrl: https://api.github.com
+  stackoverflowBaseUrl: https://api.stackexchange.com
 
 springdoc:
   swagger-ui:

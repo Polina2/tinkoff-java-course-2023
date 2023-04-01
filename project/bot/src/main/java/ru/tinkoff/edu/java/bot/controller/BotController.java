@@ -11,7 +11,6 @@ import ru.tinkoff.edu.java.bot.dto.*;
 public class BotController {
 
     @PostMapping
-    public Response sendUpdate(@RequestBody LinkUpdate linkUpdate){
-        return new Response("Обновление обработано");
+    public void sendUpdate(@RequestBody LinkUpdate linkUpdate){
     }
 }

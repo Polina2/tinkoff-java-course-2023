@@ -1,20 +1,22 @@
 package ru.tinkoff.edu.java.bot.controller.exception_handler;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.beans.TypeMismatchException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.tinkoff.edu.java.bot.dto.ApiErrorResponse;
 
 @RestControllerAdvice
-public class BotExceptionHandler extends ResponseEntityExceptionHandler {
+public class BotExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<Object> handle(Exception e, WebRequest request){
-        String body = "Некорректные параметры запроса";
-        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatusCode.valueOf(400), request);
+    @ExceptionHandler(TypeMismatchException.class)
+    protected ResponseEntity<ApiErrorResponse> handleBadRequestError(Exception e){
+        ApiErrorResponse response = createError(e, HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.toString());
+        return ResponseEntity.status(400).body(response);
+    }
+
+    private ApiErrorResponse createError(Exception ex, String description, String code){
+        return new ApiErrorResponse(description, code, ex.toString(), ex.getMessage(), null);
     }
 }
