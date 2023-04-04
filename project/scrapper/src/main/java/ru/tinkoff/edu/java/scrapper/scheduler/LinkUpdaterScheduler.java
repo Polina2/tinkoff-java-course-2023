@@ -1,17 +1,17 @@
 package ru.tinkoff.edu.java.scrapper.scheduler;
 
+import lombok.extern.java.Log;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import java.util.logging.Logger;
-
+@Component
 @EnableScheduling
+@Log
 public class LinkUpdaterScheduler {
-
-    private static final Logger LOGGER = Logger.getLogger(LinkUpdaterScheduler.class.getName());
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update(){
-        LOGGER.info("Updating");
+        log.info("Updating");
     }
 }
