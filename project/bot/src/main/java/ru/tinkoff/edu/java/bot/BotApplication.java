@@ -14,7 +14,9 @@ public class BotApplication
     {
         var ctx = SpringApplication.run(BotApplication.class, args);
         ApplicationConfig config = ctx.getBean(ApplicationConfig.class);
-        BotImplementation bot = new BotImplementation(config.token());
+        //BotImplementation bot = new BotImplementation(config.token());
+        BotImplementation bot = ctx.getBean(BotImplementation.class);
+        bot.setToken(config.token());
         bot.start();
         System.out.println(config);
     }

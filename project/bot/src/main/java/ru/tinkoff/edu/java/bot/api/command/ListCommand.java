@@ -18,6 +18,9 @@ public class ListCommand implements Command{
 
     @Autowired
     @Qualifier("startCommand")
+    public void setSuccessor(Command successor){
+        this.successor = successor;
+    }
     @Override
     public Command successor() {
         return this.successor;

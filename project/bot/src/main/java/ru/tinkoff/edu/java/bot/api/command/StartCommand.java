@@ -16,6 +16,9 @@ public class StartCommand implements Command {
 
     @Autowired
     @Qualifier("trackCommand")
+    public void setSuccessor(Command successor){
+        this.successor = successor;
+    }
     @Override
     public Command successor() {
         return this.successor;
@@ -34,7 +37,6 @@ public class StartCommand implements Command {
     @Override
     public String createReply(Update update) {
         client.addChat(update.message().chat().id());
-        String text = "Привет! Давайте начнем. Для получения списка доступных команд введите /help";
-        return text;
+        return "Привет! Давайте начнем. Для получения списка доступных команд введите /help";
     }
 }

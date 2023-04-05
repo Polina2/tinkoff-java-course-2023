@@ -5,11 +5,15 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class BotImplementation {
 
-    private final TelegramBot bot;
-    private final UserMessageProcessor ump = new UserMessageProcessor();
+    private TelegramBot bot;
+    private final UserMessageProcessor ump;
     public void start(){
         bot.setUpdatesListener(list -> {
             for (Update update : list){
@@ -20,7 +24,11 @@ public class BotImplementation {
         });
     }
 
-    public BotImplementation(String token){
+    public void setToken(String token){
         bot = new TelegramBot(token);
     }
+
+//    public BotImplementation(String token){
+//        bot = new TelegramBot(token);
+//    }
 }
