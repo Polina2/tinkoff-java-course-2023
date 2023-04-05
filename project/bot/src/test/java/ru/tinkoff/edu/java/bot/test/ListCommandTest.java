@@ -19,7 +19,7 @@ import java.util.List;
 
 @SpringBootTest
 public class ListCommandTest {
-    private final ListCommand command = new ListCommand();
+    private final ListCommand command = new ListCommand(null);
     @Mock
     Update update;
     @Mock

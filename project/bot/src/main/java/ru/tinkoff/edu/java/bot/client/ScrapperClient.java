@@ -1,19 +1,19 @@
 package ru.tinkoff.edu.java.bot.client;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.tinkoff.edu.java.bot.dto.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
 import ru.tinkoff.edu.java.bot.dto.RemoveLinkRequest;
 
-
+@Component
+@RequiredArgsConstructor
 public class ScrapperClient {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Autowired
-    private WebClient webClient;
+    private final WebClient webClient;
 
     public void addChat(Long id){
         String path = "/tg-chat/{id}";

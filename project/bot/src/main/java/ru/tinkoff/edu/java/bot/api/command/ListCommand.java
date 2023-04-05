@@ -1,14 +1,26 @@
 package ru.tinkoff.edu.java.bot.api.command;
 
 import com.pengrad.telegrambot.model.Update;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.bot.client.ScrapperClient;
 import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
 
+@Component
+@RequiredArgsConstructor
 public class ListCommand implements Command{
 
+    private final ScrapperClient client;
+    private Command successor;
+
+    @Autowired
+    @Qualifier("startCommand")
     @Override
     public Command successor() {
-        return new StartCommand();
+        return this.successor;
     }
 
     @Override

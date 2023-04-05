@@ -1,11 +1,23 @@
 package ru.tinkoff.edu.java.bot.api.command;
 
 import com.pengrad.telegrambot.model.Update;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HelpCommand implements Command{
+    private Command successor;
+
+    @Autowired
+    @Qualifier("listCommand")
+    public void setSuccessor(Command command){
+        this.successor = command;
+    }
+
     @Override
     public Command successor() {
-        return new ListCommand();
+        return this.successor;
     }
 
     @Override

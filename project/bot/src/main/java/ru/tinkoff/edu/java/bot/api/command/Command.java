@@ -2,11 +2,10 @@ package ru.tinkoff.edu.java.bot.api.command;
 
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
-import ru.tinkoff.edu.java.bot.client.ScrapperClient;
 
 public interface Command {
 
-    ScrapperClient client = new ScrapperClient();
+//    protected final ScrapperClient client;
 
     Command successor();
 
