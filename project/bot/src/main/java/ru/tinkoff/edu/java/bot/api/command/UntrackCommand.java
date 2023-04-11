@@ -18,11 +18,6 @@ public class UntrackCommand implements Command{
     private final ScrapperClient client;
 
     @Override
-    public Command successor() {
-        return null;
-    }
-
-    @Override
     public String command() {
         return "/untrack";
     }
@@ -48,13 +43,11 @@ public class UntrackCommand implements Command{
     public boolean supports(Update update){
         String text = update.message().text();
         Long chatId = update.message().chat().id();
-        if (text.equals(command())){
-            lastMessages.put(chatId, text);
-            return true;
+        lastMessages.put(chatId, text);
+        if (text.charAt(0) == '/'){
+            return text.equals(command());
         } else {
-            boolean answer = isReply(update);
-            lastMessages.put(chatId, text);
-            return answer;
+            return isReply(update);
         }
     }
 
