@@ -82,6 +82,39 @@
 		  <scope>test</scope>
 	  </dependency>
 
+	  <dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-test</artifactId>
+		  <scope>test</scope>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>org.testcontainers</groupId>
+		  <artifactId>junit-jupiter</artifactId>
+		  <scope>test</scope>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.testcontainers</groupId>
+		  <artifactId>postgresql</artifactId>
+		  <scope>test</scope>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>org.liquibase</groupId>
+		  <artifactId>liquibase-core</artifactId>
+		  <scope>test</scope>
+	  </dependency>
+	  <!-- Database -->
+	  <dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-jdbc</artifactId>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>org.postgresql</groupId>
+		  <artifactId>postgresql</artifactId>
+		  <scope>runtime</scope>
+	  </dependency>
   </dependencies>
 
   <build>
