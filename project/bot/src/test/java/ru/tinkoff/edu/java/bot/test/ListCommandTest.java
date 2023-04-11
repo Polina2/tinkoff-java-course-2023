@@ -2,12 +2,9 @@ package ru.tinkoff.edu.java.bot.test;
 
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
 import ru.tinkoff.edu.java.bot.api.command.HelpCommand;
 import ru.tinkoff.edu.java.bot.api.command.ListCommand;
 import ru.tinkoff.edu.java.bot.dto.LinkResponse;
@@ -17,13 +14,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
 public class ListCommandTest {
     private final ListCommand command = new ListCommand(null);
-    @Mock
-    Update update;
-    @Mock
-    Message message;
 
     @Test
     public void listOfLinks(){
@@ -38,10 +30,9 @@ public class ListCommandTest {
 
         String message = command.createReply(response);
 
-        MatcherAssert.assertThat(message, Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(message, Matchers.equalTo(
-                "Отслеживаемые ссылки:\nhttps://github.com/sanyarnd/tinkoff-java-course-2022\nhttps://stackoverflow.com/questions/21323309"
-        ));
+        String expectedMessage = "Отслеживаемые ссылки:\nhttps://github.com/sanyarnd/tinkoff-java-course-2022\nhttps://stackoverflow.com/questions/21323309";
+        Assertions.assertNotNull(message);
+        Assertions.assertEquals(expectedMessage, message);
     }
 
     @Test
@@ -50,8 +41,9 @@ public class ListCommandTest {
 
         String message = command.createReply(response);
 
-        MatcherAssert.assertThat(message, Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(message, Matchers.equalTo("У вас нет отслеживаемых ссылок"));
+        String expectedMessage = "У вас нет отслеживаемых ссылок";
+        Assertions.assertNotNull(message);
+        Assertions.assertEquals(expectedMessage, message);
     }
 
 
@@ -59,12 +51,15 @@ public class ListCommandTest {
     @Test
     public void nonCommandMessage(){
         String text = "/abc";
+        Update update = Mockito.mock(Update.class);
+        Message message = Mockito.mock(Message.class);
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(text);
 
         String reply = new HelpCommand().handle(update);
 
-        MatcherAssert.assertThat(reply, Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(reply, Matchers.equalTo("Я вас не понимаю. Для получения списка доступных команд введите /help"));
+        Assertions.assertNotNull(reply);
+        String expectedReply = "Я вас не понимаю. Для получения списка доступных команд введите /help";
+        Assertions.assertEquals(expectedReply, reply);
     }
 }
