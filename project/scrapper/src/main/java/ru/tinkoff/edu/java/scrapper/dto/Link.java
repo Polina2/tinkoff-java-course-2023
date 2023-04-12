@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dao;
+package ru.tinkoff.edu.java.scrapper.dto;
 
 import java.sql.Timestamp;
 
