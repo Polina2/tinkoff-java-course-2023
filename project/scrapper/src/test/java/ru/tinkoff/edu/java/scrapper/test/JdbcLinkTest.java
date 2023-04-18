@@ -14,7 +14,6 @@ import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
 import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.TgChatRepository;
 
-import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,17 +35,14 @@ public class JdbcLinkTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void addTest(){
-        TgChat tgChat = new TgChat(1L, "user");
+        TgChat tgChat = new TgChat( "user");
         tgChatRepository.add(tgChat);
         TgChat actualTgChat = testJdbcTemplate.query(
                 "SELECT * FROM tg_chat WHERE name = ?",
                 (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
                 tgChat.name()
         ).get(0);
-        Link expectedLink = new Link(
-                1L, "https://stackoverflow.com/questions/19896870",
-                new Timestamp(3456), actualTgChat.id()
-        );
+        Link expectedLink = new Link("https://stackoverflow.com/questions/19896870", actualTgChat.id());
 
         linkRepository.add(expectedLink);
 
@@ -73,17 +69,14 @@ public class JdbcLinkTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void removeTest(){
-        TgChat tgChat = new TgChat(1L, "user");
+        TgChat tgChat = new TgChat( "user");
         tgChatRepository.add(tgChat);
         TgChat actualTgChat = testJdbcTemplate.query(
                 "SELECT * FROM tg_chat WHERE name = ?",
                 (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
                 tgChat.name()
         ).get(0);
-        Link link = new Link(
-                2L, "https://stackoverflow.com/questions/42215617",
-                new Timestamp(2345), actualTgChat.id()
-        );
+        Link link = new Link("https://stackoverflow.com/questions/42215617", actualTgChat.id());
         linkRepository.add(link);
 
         linkRepository.remove(link);
@@ -110,7 +103,7 @@ public class JdbcLinkTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void findAllTest(){
-        TgChat tgChat = new TgChat(1L, "user");
+        TgChat tgChat = new TgChat("user");
         tgChatRepository.add(tgChat);
         TgChat actualTgChat = testJdbcTemplate.query(
                 "SELECT * FROM tg_chat WHERE name = ?",
@@ -118,14 +111,8 @@ public class JdbcLinkTest extends IntegrationEnvironment{
                 tgChat.name()
         ).get(0);
 
-        Link link1 = new Link(
-                2L, "https://stackoverflow.com/questions/42215617",
-                new Timestamp(2345), actualTgChat.id()
-        );
-        Link link2 = new Link(
-                1L, "https://stackoverflow.com/questions/19896870",
-                new Timestamp(3456), actualTgChat.id()
-        );
+        Link link1 = new Link("https://stackoverflow.com/questions/42215617", actualTgChat.id());
+        Link link2 = new Link("https://stackoverflow.com/questions/19896870", actualTgChat.id());
         linkRepository.add(link1);
         linkRepository.add(link2);
 

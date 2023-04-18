@@ -30,8 +30,8 @@ public class JdbcTgChatTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void findAllTest() {
-        TgChat tgChat1 = new TgChat(1L, "user1");
-        TgChat tgChat2 = new TgChat(2L, "user2");
+        TgChat tgChat1 = new TgChat( "user1");
+        TgChat tgChat2 = new TgChat( "user2");
         List<TgChat> expectedList = List.of(tgChat1, tgChat2);
         tgChatRepository.add(tgChat1);
         tgChatRepository.add(tgChat2);
@@ -48,7 +48,7 @@ public class JdbcTgChatTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void addTest() {
-        TgChat expectedTgChat = new TgChat(1L, "user1");
+        TgChat expectedTgChat = new TgChat("user1");
 
         tgChatRepository.add(expectedTgChat);
         List<TgChat> actualList = testJdbcTemplate.query(
@@ -65,7 +65,7 @@ public class JdbcTgChatTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void removeTest(){
-        TgChat tgChat = new TgChat(2L, "user2");
+        TgChat tgChat = new TgChat( "user2");
         tgChatRepository.add(tgChat);
         TgChat actualTgChat = testJdbcTemplate.query(
                 "SELECT * FROM tg_chat WHERE name = ?",

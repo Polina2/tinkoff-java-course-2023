@@ -33,9 +33,6 @@ public class LinkRepository implements IRepository<Link> {
 
     @Override
     public void remove(Link object) {
-        //String sql = "DELETE FROM link WHERE url = ?";
-        //jdbcTemplate.update(sql, object.url());
-
         String sqlLink = "DELETE FROM link WHERE url = ?";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update((connection) -> {
@@ -58,6 +55,23 @@ public class LinkRepository implements IRepository<Link> {
                         rs.getString("url"),
                         rs.getTimestamp("last_update")
                 ));
+        return list;
+    }
+
+    public List<Link> findByTgChatId(Long tgChatId){
+        String sql = """
+                SELECT *
+                FROM link
+                WHERE link_id = (
+                SELECT link_id
+                FROM subscription
+                WHERE chat_id = ?)""";
+        List<Link> list = jdbcTemplate.query(sql,
+                (rs, rn) -> new Link(
+                        rs.getLong("link_id"),
+                        rs.getString("url"),
+                        rs.getTimestamp("last_update")
+                ), tgChatId);
         return list;
     }
 }

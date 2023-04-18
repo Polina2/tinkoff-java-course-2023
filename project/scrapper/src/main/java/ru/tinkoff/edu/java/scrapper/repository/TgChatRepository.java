@@ -15,8 +15,13 @@ public class TgChatRepository implements IRepository<TgChat>{
 
     @Override
     public void add(TgChat object) {
-        String sql = "INSERT INTO tg_chat (name) VALUES (?)";
-        jdbcTemplate.update(sql, object.name());
+        if (object.id() != null){
+            String sql = "INSERT INTO tg_chat VALUES (?, ?)";
+            jdbcTemplate.update(sql, object.id(), object.name());
+        } else {
+            String sql = "INSERT INTO tg_chat (name) VALUES (?)";
+            jdbcTemplate.update(sql, object.name());
+        }
     }
 
     @Override

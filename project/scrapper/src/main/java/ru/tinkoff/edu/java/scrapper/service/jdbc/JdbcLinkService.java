@@ -16,17 +16,19 @@ public class JdbcLinkService implements LinkService {
     private final LinkRepository linkRepository;
 
     @Override
-    public Link add(long tgChatId, URI url) {
-        return null;
+    public void add(long tgChatId, URI url) {
+        Link link = new Link(url.toString(), tgChatId);
+        linkRepository.add(link);
     }
 
     @Override
-    public Link remove(long tgChatId, URI url) {
-        return null;
+    public void remove(long tgChatId, URI url) {
+        Link link = new Link(url.toString(), tgChatId);
+        linkRepository.remove(link);
     }
 
     @Override
     public Collection<Link> listAll(long tgChatId) {
-        return null;
+        return linkRepository.findByTgChatId(tgChatId);
     }
 }
