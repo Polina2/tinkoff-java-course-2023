@@ -9,6 +9,9 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.server.ServerWebInputException;
 import ru.tinkoff.edu.java.scrapper.dto.ApiErrorResponse;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @RestControllerAdvice
 public class ScrapperExceptionHandler {
 
@@ -35,6 +38,9 @@ public class ScrapperExceptionHandler {
     }
 
     private ApiErrorResponse createError(Exception ex, String description, String code){
-        return new ApiErrorResponse(description, code, ex.toString(), ex.getMessage(), null);
+        return new ApiErrorResponse(
+                description, code, ex.toString(), ex.getMessage(),
+                Arrays.stream(ex.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+        );
     }
 }
