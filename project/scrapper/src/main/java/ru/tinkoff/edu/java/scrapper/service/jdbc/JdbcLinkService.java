@@ -31,4 +31,10 @@ public class JdbcLinkService implements LinkService {
     public Collection<Link> listAll(long tgChatId) {
         return linkRepository.findByTgChatId(tgChatId);
     }
+
+    @Override
+    public Collection<Link> listNotChecked() {
+        return linkRepository.findNotChecked();
+    }
+
 }

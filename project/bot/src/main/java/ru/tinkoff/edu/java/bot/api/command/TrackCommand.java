@@ -43,12 +43,14 @@ public class TrackCommand implements Command{
     public boolean supports(Update update){
         String text = update.message().text();
         Long chatId = update.message().chat().id();
-        lastMessages.put(chatId, text);
+        boolean answer;
         if (text.charAt(0) == '/'){
-            return text.equals(command());
+            answer = text.equals(command());
         } else {
-            return isReply(update);
+            answer = isReply(update);
         }
+        lastMessages.put(chatId, text);
+        return answer;
     }
 
     private boolean isReply(Update update){

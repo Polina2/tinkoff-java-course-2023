@@ -32,4 +32,18 @@ public class TgChatRepository implements IRepository<TgChat>{
                 sql, (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")));
         return list;
     }
+
+    public List<TgChat> findByLink(String url){
+        String sql = """
+                SELECT * FROM tg_chat
+                WHERE id = (
+                SELECT chat_id FROM subscription
+                WHERE link_id = (
+                SELECT id FROM link
+                WHERE url = ?))
+                """;
+        return jdbcTemplate.query(
+                sql, (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")), url
+        );
+    }
 }

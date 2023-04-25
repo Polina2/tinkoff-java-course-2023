@@ -1,17 +1,69 @@
 package ru.tinkoff.edu.java.scrapper.scheduler;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.link_parser.GitHubLinkParser;
+import ru.tinkoff.edu.java.link_parser.StackOverflowLinkParser;
+import ru.tinkoff.edu.java.scrapper.client.BotClient;
+import ru.tinkoff.edu.java.scrapper.client.GitHubClient;
+import ru.tinkoff.edu.java.scrapper.client.StackOverflowClient;
+import ru.tinkoff.edu.java.scrapper.dto.GitHubReposResponse;
+import ru.tinkoff.edu.java.scrapper.dto.LinkUpdate;
+import ru.tinkoff.edu.java.scrapper.dto.ListAnswersResponse;
+import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
+import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
+import ru.tinkoff.edu.java.scrapper.service.LinkService;
+import ru.tinkoff.edu.java.scrapper.service.TgChatService;
+
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 @EnableScheduling
 @Log
+@RequiredArgsConstructor
 public class LinkUpdaterScheduler {
+
+    private final TgChatService tgChatService;
+    private final LinkService linkService;
+    private final GitHubClient gitHubClient;
+    private final StackOverflowClient stackOverflowClient;
+    private final BotClient botClient;
+
+    private final GitHubLinkParser gitHubLinkParser = new GitHubLinkParser();
+    private final StackOverflowLinkParser stackOverflowLinkParser = new StackOverflowLinkParser(gitHubLinkParser);
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update(){
         log.info("Updating");
+
+        List<Link> linkList = (List<Link>) linkService.listNotChecked();
+
+        for (Link link : linkList){
+            List<Long> tgChatIds = tgChatService.listAll(URI.create(link.url())).stream().map(TgChat::tgChatId).toList();
+            String res = stackOverflowLinkParser.parse(link.url());
+
+            if (res.matches("\\d+")){
+                GitHubReposResponse ghResponse = gitHubClient.getRepository(res).block();
+                if (!ghResponse.updated_at().toInstant().equals(link.last_update().toInstant())){
+                    botClient.sendUpdate(new LinkUpdate(
+                            link.id(), URI.create(link.url()), "some update", tgChatIds
+                    ));
+                }
+            } else {
+                ListAnswersResponse soResponse = stackOverflowClient.getAnswers(res).block();
+                if (!Collections.max(soResponse.items().stream()
+                        .map((stackOverflowResponse -> stackOverflowResponse.last_edit_date().toInstant()))
+                        .toList()).equals(link.last_update().toInstant())){
+                    botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
+                            "some update", tgChatIds));
+                }
+            }
+
+        }
     }
 }

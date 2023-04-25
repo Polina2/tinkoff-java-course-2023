@@ -24,6 +24,10 @@ public class BotImplementation {
         });
     }
 
+    public void sendUpdate(SendMessage message){
+        bot.execute(message);
+    }
+
     public void setToken(String token){
         bot = new TelegramBot(token);
     }

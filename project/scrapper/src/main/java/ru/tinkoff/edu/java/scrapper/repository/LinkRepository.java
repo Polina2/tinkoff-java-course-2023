@@ -63,7 +63,8 @@ public class LinkRepository implements IRepository<Link> {
                 sql, (rs, rn) -> new Link(
                         rs.getLong("id"),
                         rs.getString("url"),
-                        rs.getTimestamp("last_update")
+                        rs.getTimestamp("last_update"),
+                        rs.getTimestamp("last_check")
                 ));
         return list;
     }
@@ -78,10 +79,23 @@ public class LinkRepository implements IRepository<Link> {
                 WHERE chat_id = ?)""";
         List<Link> list = jdbcTemplate.query(sql,
                 (rs, rn) -> new Link(
-                        rs.getLong("link_id"),
+                        rs.getLong("id"),
                         rs.getString("url"),
-                        rs.getTimestamp("last_update")
+                        rs.getTimestamp("last_update"),
+                        rs.getTimestamp("last_check")
                 ), tgChatId);
+        return list;
+    }
+
+    public List<Link> findNotChecked(){
+        String sql = "SELECT * FROM link WHERE CURRENT_TIMESTAMP - last_check > '02:00:00'";
+        List<Link> list = jdbcTemplate.query(sql,
+                (rs, rn) -> new Link(
+                        rs.getLong("id"),
+                        rs.getString("url"),
+                        rs.getTimestamp("last_update"),
+                        rs.getTimestamp("last_check")
+                ));
         return list;
     }
 }
