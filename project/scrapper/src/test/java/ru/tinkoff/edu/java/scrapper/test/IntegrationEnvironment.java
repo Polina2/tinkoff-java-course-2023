@@ -36,7 +36,7 @@ public abstract class IntegrationEnvironment {
 
     private static void runMigrations(JdbcDatabaseContainer<?> container){
         Path changelogPath = new File(".").toPath().toAbsolutePath()
-                .getParent().getParent().resolve("migrations");
+                .getParent().resolve("src/main/resources/migrations");
         try {
             Connection connection = DriverManager.getConnection(
                     container.getJdbcUrl(), container.getUsername(), container.getPassword()

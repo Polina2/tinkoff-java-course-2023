@@ -1,7 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.dto.db_dto;
 
-public record TgChat(Long id, String name) {
-    public TgChat(String name){
-        this(null, name);
+public record TgChat(Long id, Long tgChatId) {
+    public TgChat(Long tgChatId){
+        this(null, tgChatId);
     }
 }

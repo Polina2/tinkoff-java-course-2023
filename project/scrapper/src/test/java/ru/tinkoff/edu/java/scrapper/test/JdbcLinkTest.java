@@ -35,48 +35,49 @@ public class JdbcLinkTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void addTest(){
-        TgChat tgChat = new TgChat( "user");
+        TgChat tgChat = new TgChat( 1L);
         tgChatRepository.add(tgChat);
         TgChat actualTgChat = testJdbcTemplate.query(
-                "SELECT * FROM tg_chat WHERE name = ?",
-                (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
-                tgChat.name()
+                "SELECT * FROM tg_chat WHERE tg_chat_id = ?",
+                (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")),
+                tgChat.tgChatId()
         ).get(0);
-        Link expectedLink = new Link("https://stackoverflow.com/questions/19896870", actualTgChat.id());
+        Link expectedLink = new Link("https://stackoverflow.com/questions/19896870", tgChat.tgChatId());
 
         linkRepository.add(expectedLink);
 
         List<Link> actualLinkList = testJdbcTemplate.query(
                 "SELECT * FROM link WHERE url = ?",
                 (rs, rn) -> new Link(
-                        rs.getLong("link_id"),
+                        rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update")
                 ),
                 expectedLink.url()
         );
         List<Long> actualSubscriptList = testJdbcTemplate.query(
-                "SELECT * FROM subscription WHERE chat_id = ?",
+                "SELECT link_id FROM subscription WHERE chat_id = ?",
                 (rs, rn) -> rs.getLong("link_id"),
                 actualTgChat.id()
         );
         Assertions.assertEquals(1, actualLinkList.size());
         Assertions.assertEquals(expectedLink.url(), actualLinkList.get(0).url());
         Assertions.assertEquals(1, actualSubscriptList.size());
+        Assertions.assertEquals(actualLinkList.get(0).id(), actualSubscriptList.get(0));
     }
 
     @Test
     @Transactional
     @Rollback
     public void removeTest(){
-        TgChat tgChat = new TgChat( "user");
+        TgChat tgChat = new TgChat( 2L);
         tgChatRepository.add(tgChat);
         TgChat actualTgChat = testJdbcTemplate.query(
-                "SELECT * FROM tg_chat WHERE name = ?",
-                (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
-                tgChat.name()
+                "SELECT * FROM tg_chat WHERE tg_chat_id = ?",
+                (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")),
+                tgChat.tgChatId()
         ).get(0);
-        Link link = new Link("https://stackoverflow.com/questions/42215617", actualTgChat.id());
+        Link link = new Link("https://stackoverflow.com/questions/42215617", tgChat.tgChatId());
         linkRepository.add(link);
 
         linkRepository.remove(link);
@@ -84,18 +85,18 @@ public class JdbcLinkTest extends IntegrationEnvironment{
         List<Link> actualLinkList = testJdbcTemplate.query(
                 "SELECT * FROM link WHERE url = ?",
                 (rs, rn) -> new Link(
-                        rs.getLong("link_id"),
+                        rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update")
                 ),
                 link.url()
         );
         List<Long> actualSubscriptList = testJdbcTemplate.query(
-                "SELECT * FROM subscription WHERE chat_id = ?",
+                "SELECT link_id FROM subscription WHERE chat_id = ?",
                 (rs, rn) -> rs.getLong("link_id"),
                 actualTgChat.id()
         );
-        Assertions.assertEquals(Collections.EMPTY_LIST, actualLinkList);
+        Assertions.assertEquals(1, actualLinkList.size());
         Assertions.assertEquals(Collections.EMPTY_LIST, actualSubscriptList);
     }
 
@@ -103,16 +104,11 @@ public class JdbcLinkTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void findAllTest(){
-        TgChat tgChat = new TgChat("user");
+        TgChat tgChat = new TgChat(3L);
         tgChatRepository.add(tgChat);
-        TgChat actualTgChat = testJdbcTemplate.query(
-                "SELECT * FROM tg_chat WHERE name = ?",
-                (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
-                tgChat.name()
-        ).get(0);
 
-        Link link1 = new Link("https://stackoverflow.com/questions/42215617", actualTgChat.id());
-        Link link2 = new Link("https://stackoverflow.com/questions/19896870", actualTgChat.id());
+        Link link1 = new Link("https://stackoverflow.com/questions/42215617", tgChat.tgChatId());
+        Link link2 = new Link("https://stackoverflow.com/questions/19896870", tgChat.tgChatId());
         linkRepository.add(link1);
         linkRepository.add(link2);
 

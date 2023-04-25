@@ -27,22 +27,32 @@ public class LinkRepository implements IRepository<Link> {
             return ps;
         }, keyHolder);
 
+        Long tgChatId = jdbcTemplate.query(
+                "SELECT id FROM tg_chat WHERE tg_chat_id = ?",
+                (rs, rn) -> rs.getLong("id"),
+                object.tgChatId()
+        ).get(0);
+
         String sqlSubscript = "INSERT INTO subscription VALUES (?, ?)";
-        jdbcTemplate.update(sqlSubscript, object.tgChatId(), keyHolder.getKeys().get("link_id"));
+        jdbcTemplate.update(sqlSubscript, tgChatId, keyHolder.getKeys().get("id"));
     }
 
     @Override
     public void remove(Link object) {
-        String sqlLink = "DELETE FROM link WHERE url = ?";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update((connection) -> {
-            PreparedStatement ps = connection.prepareStatement(sqlLink, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, object.url());
-            return ps;
-        }, keyHolder);
+        Long tgChatId = jdbcTemplate.query(
+                "SELECT id FROM tg_chat WHERE tg_chat_id = ?",
+                (rs, rn) -> rs.getLong("id"),
+                object.tgChatId()
+        ).get(0);
+
+        Long linkId = jdbcTemplate.query(
+                "SELECT id FROM link WHERE url = ?",
+                (rs, rn) -> rs.getLong("id"),
+                object.url()
+        ).get(0);
 
         String sqlSubscript = "DELETE FROM subscription WHERE chat_id = ? AND link_id = ?";
-        jdbcTemplate.update(sqlSubscript, object.tgChatId(), keyHolder.getKeys().get("link_id"));
+        jdbcTemplate.update(sqlSubscript, tgChatId, linkId);
     }
 
     @Override
@@ -51,7 +61,7 @@ public class LinkRepository implements IRepository<Link> {
 
         List<Link> list = jdbcTemplate.query(
                 sql, (rs, rn) -> new Link(
-                        rs.getLong("link_id"),
+                        rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update")
                 ));
@@ -62,7 +72,7 @@ public class LinkRepository implements IRepository<Link> {
         String sql = """
                 SELECT *
                 FROM link
-                WHERE link_id = (
+                WHERE id = (
                 SELECT link_id
                 FROM subscription
                 WHERE chat_id = ?)""";

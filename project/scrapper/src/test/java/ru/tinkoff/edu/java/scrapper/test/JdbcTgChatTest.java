@@ -30,8 +30,8 @@ public class JdbcTgChatTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void findAllTest() {
-        TgChat tgChat1 = new TgChat( "user1");
-        TgChat tgChat2 = new TgChat( "user2");
+        TgChat tgChat1 = new TgChat( 12L);
+        TgChat tgChat2 = new TgChat( 234L);
         List<TgChat> expectedList = List.of(tgChat1, tgChat2);
         tgChatRepository.add(tgChat1);
         tgChatRepository.add(tgChat2);
@@ -39,8 +39,8 @@ public class JdbcTgChatTest extends IntegrationEnvironment{
         List<TgChat> actualList = tgChatRepository.findAll();
 
         Assertions.assertEquals(
-                expectedList.stream().map(TgChat::name).collect(Collectors.toList()),
-                actualList.stream().map(TgChat::name).collect(Collectors.toList())
+                expectedList.stream().map(TgChat::tgChatId).collect(Collectors.toList()),
+                actualList.stream().map(TgChat::tgChatId).collect(Collectors.toList())
                 );
     }
 
@@ -48,37 +48,32 @@ public class JdbcTgChatTest extends IntegrationEnvironment{
     @Transactional
     @Rollback
     public void addTest() {
-        TgChat expectedTgChat = new TgChat("user1");
+        TgChat expectedTgChat = new TgChat(1L);
 
         tgChatRepository.add(expectedTgChat);
-        List<TgChat> actualList = testJdbcTemplate.query(
-                "SELECT * FROM tg_chat WHERE name = ?",
-                (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
-                expectedTgChat.name()
-        );
 
+        List<TgChat> actualList = testJdbcTemplate.query(
+                "SELECT * FROM tg_chat WHERE tg_chat_id = ?",
+                (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")),
+                expectedTgChat.tgChatId()
+        );
         Assertions.assertEquals(1, actualList.size());
-        Assertions.assertEquals(expectedTgChat.name(), actualList.get(0).name());
+        Assertions.assertEquals(expectedTgChat.tgChatId(), actualList.get(0).tgChatId());
     }
 
     @Test
     @Transactional
     @Rollback
     public void removeTest(){
-        TgChat tgChat = new TgChat( "user2");
+        TgChat tgChat = new TgChat( 2L);
         tgChatRepository.add(tgChat);
-        TgChat actualTgChat = testJdbcTemplate.query(
-                "SELECT * FROM tg_chat WHERE name = ?",
-                (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
-                tgChat.name()
-        ).get(0);
 
-        tgChatRepository.remove(actualTgChat);
+        tgChatRepository.remove(tgChat);
 
         List<TgChat> actualList = testJdbcTemplate.query(
-                "SELECT * FROM tg_chat WHERE name = ?",
-                (rs, rn) -> new TgChat(rs.getLong("chat_id"), rs.getString("name")),
-                tgChat.name()
+                "SELECT * FROM tg_chat WHERE tg_chat_id = ?",
+                (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")),
+                tgChat.tgChatId()
         );
         Assertions.assertEquals(Collections.EMPTY_LIST, actualList);
     }

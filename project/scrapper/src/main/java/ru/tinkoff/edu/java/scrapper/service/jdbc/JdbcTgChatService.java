@@ -13,12 +13,12 @@ public class JdbcTgChatService implements TgChatService {
     private final TgChatRepository tgChatRepository;
 
     @Override
-    public void register(long tgChatId, String username) {
-        tgChatRepository.add(new TgChat(tgChatId, username));
+    public void register(long tgChatId) {
+        tgChatRepository.add(new TgChat(tgChatId));
     }
 
     @Override
     public void unregister(long tgChatId) {
-        tgChatRepository.remove(new TgChat(tgChatId, null));
+        tgChatRepository.remove(new TgChat(tgChatId));
     }
 }

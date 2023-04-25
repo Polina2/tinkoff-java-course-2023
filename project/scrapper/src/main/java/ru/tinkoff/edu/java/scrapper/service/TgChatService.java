@@ -1,6 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.service;
 
 public interface TgChatService {
-    void register(long tgChatId, String username);
+    void register(long tgChatId);
     void unregister(long tgChatId);
 }
