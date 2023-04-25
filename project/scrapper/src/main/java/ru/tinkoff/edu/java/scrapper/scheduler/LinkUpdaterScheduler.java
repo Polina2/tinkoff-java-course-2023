@@ -13,12 +13,16 @@ import ru.tinkoff.edu.java.scrapper.client.StackOverflowClient;
 import ru.tinkoff.edu.java.scrapper.dto.GitHubReposResponse;
 import ru.tinkoff.edu.java.scrapper.dto.LinkUpdate;
 import ru.tinkoff.edu.java.scrapper.dto.ListAnswersResponse;
+import ru.tinkoff.edu.java.scrapper.dto.StackOverflowResponse;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
 import ru.tinkoff.edu.java.scrapper.service.TgChatService;
 
 import java.net.URI;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,14 +57,17 @@ public class LinkUpdaterScheduler {
                     botClient.sendUpdate(new LinkUpdate(
                             link.id(), URI.create(link.url()), "some update", tgChatIds
                     ));
+                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updated_at().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
                 }
             } else {
                 ListAnswersResponse soResponse = stackOverflowClient.getAnswers(res).block();
-                if (!Collections.max(soResponse.items().stream()
-                        .map((stackOverflowResponse -> stackOverflowResponse.last_edit_date().toInstant()))
-                        .toList()).equals(link.last_update().toInstant())){
+                OffsetDateTime time = Collections.max(soResponse.items().stream()
+                        .map((StackOverflowResponse::last_edit_date))
+                        .toList());
+                if (!time.toInstant().equals(link.last_update().toInstant())){
                     botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
                             "some update", tgChatIds));
+                    linkService.updateLink(link, Timestamp.valueOf(time.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
                 }
             }
 

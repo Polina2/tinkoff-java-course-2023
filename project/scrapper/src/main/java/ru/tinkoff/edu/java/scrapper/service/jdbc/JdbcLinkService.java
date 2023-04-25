@@ -7,6 +7,7 @@ import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
 
 import java.net.URI;
+import java.sql.Timestamp;
 import java.util.Collection;
 
 @Service
@@ -35,6 +36,11 @@ public class JdbcLinkService implements LinkService {
     @Override
     public Collection<Link> listNotChecked() {
         return linkRepository.findNotChecked();
+    }
+
+    @Override
+    public void updateLink(Link link, Timestamp lastUpdate) {
+        linkRepository.updateLink(link, lastUpdate);
     }
 
 }

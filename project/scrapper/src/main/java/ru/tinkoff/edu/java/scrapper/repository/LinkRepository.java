@@ -9,6 +9,7 @@ import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
@@ -96,6 +97,16 @@ public class LinkRepository implements IRepository<Link> {
                         rs.getTimestamp("last_update"),
                         rs.getTimestamp("last_check")
                 ));
+
+        for (Link link : list){
+            String sqlUpdate = "UPDATE link SET last_check = current_timestamp WHERE id = ?";
+            jdbcTemplate.update(sqlUpdate, link.id());
+        }
+
         return list;
+    }
+
+    public void updateLink(Link link, Timestamp lastUpdate){
+        jdbcTemplate.update("UPDATE link SET last_update = ? WHERE id = ?", lastUpdate, link.id());
     }
 }
