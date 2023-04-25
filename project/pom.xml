@@ -13,8 +13,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>19</maven.compiler.source>
+    <maven.compiler.target>19</maven.compiler.target>
   </properties>
 
   <dependencyManagement>
@@ -34,6 +34,12 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.0.2</version>
+        </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -91,7 +97,7 @@
 		  <artifactId>maven-compiler-plugin</artifactId>
 		  <version>3.8.0</version>
 		  <configuration>
-			  <release>17</release>
+			  <release>19</release>
 			  <parameters>true</parameters>
 		  </configuration>
 		</plugin>
