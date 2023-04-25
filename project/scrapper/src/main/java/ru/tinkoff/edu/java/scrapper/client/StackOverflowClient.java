@@ -8,11 +8,11 @@ import ru.tinkoff.edu.java.scrapper.dto.ListAnswersResponse;
 @RequiredArgsConstructor
 public class StackOverflowClient {
 
-    private final WebClient webClient;
+    private final WebClient stackOverflowWebClient;
 
     public Mono<ListAnswersResponse> getAnswers(String questionId){
         String path = "/2.3/questions/"+ questionId +"/answers?site=stackoverflow";
-        Mono<ListAnswersResponse> response = webClient.get()
+        Mono<ListAnswersResponse> response = stackOverflowWebClient.get()
                 .uri(path)
                 .retrieve()
                 .bodyToMono(ListAnswersResponse.class);

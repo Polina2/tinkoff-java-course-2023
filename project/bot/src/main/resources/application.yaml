@@ -3,6 +3,9 @@ app:
   token: ${TOKEN}
   baseUrl: http://localhost:8080
 
+server:
+  port: 8180
+
 springdoc:
   swagger-ui:
     path: /swagger-ui
