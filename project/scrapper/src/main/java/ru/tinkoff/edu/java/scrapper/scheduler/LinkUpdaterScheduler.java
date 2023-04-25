@@ -66,6 +66,7 @@ public class LinkUpdaterScheduler {
                             "some update", tgChatIds));
                     linkService.updateLink(link, Timestamp.valueOf(time.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
                 }
+
             }
 
         }
