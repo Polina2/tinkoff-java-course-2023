@@ -2,9 +2,11 @@ package ru.tinkoff.edu.java.scrapper.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.tinkoff.edu.java.scrapper.dto.AddLinkRequest;
+import ru.tinkoff.edu.java.scrapper.dto.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.dto.ListLinksResponse;
 import ru.tinkoff.edu.java.scrapper.dto.RemoveLinkRequest;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,10 +21,12 @@ public class ScrapperLinkController {
     }
 
     @PostMapping
-    public void addLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody AddLinkRequest link){
+    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody AddLinkRequest link){
+        return new LinkResponse(rand.nextLong(), URI.create(""));
     }
 
     @DeleteMapping
-    public void deleteLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody RemoveLinkRequest link){
+    public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody RemoveLinkRequest link){
+        return new LinkResponse(rand.nextLong(), URI.create(""));
     }
 }
