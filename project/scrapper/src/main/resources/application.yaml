@@ -8,3 +8,9 @@ app:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/scrapper
+    username: postgres
+    password: postgres
