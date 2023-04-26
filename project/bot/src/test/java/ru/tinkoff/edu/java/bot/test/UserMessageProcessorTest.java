@@ -9,15 +9,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import ru.tinkoff.edu.java.bot.api.UserMessageProcessor;
+import ru.tinkoff.edu.java.bot.api.command.*;
+
+import java.util.Arrays;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 public class UserMessageProcessorTest {
-    @Autowired
-    private UserMessageProcessor processor;
+    private final UserMessageProcessor processor = new UserMessageProcessor(
+            Arrays.asList(
+                    new HelpCommand(null), new ListCommand(null),
+                    new StartCommand(null), new TrackCommand(null),
+                    new UntrackCommand(null)
+            )
+    );
 
     @Mock
     private Update update;
