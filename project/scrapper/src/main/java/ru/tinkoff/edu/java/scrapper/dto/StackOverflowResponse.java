@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 public record StackOverflowResponse(
-        @JsonProperty Integer answer_id, @JsonProperty OffsetDateTime creation_date,
-        @JsonProperty("last_activity_date") OffsetDateTime last_edit_date
+        @JsonProperty Integer answerId, @JsonProperty OffsetDateTime creationDate,
+        @JsonProperty("last_activity_date") OffsetDateTime lastActivityDate
 ) {
 }

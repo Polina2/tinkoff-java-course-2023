@@ -48,24 +48,24 @@ public class LinkUpdaterScheduler {
             if (!res.matches("\\d+")){
                 GitHubReposResponse ghResponse = gitHubClient.getRepository(res).block();
                 GitHubCommitResponse ghcResponse = gitHubClient.getLastCommit(res).blockFirst();
-                if (!ghResponse.updated_at().toInstant().equals(link.last_update().toInstant())){
+                if (!ghResponse.updatedAt().toInstant().equals(link.last_update().toInstant())){
                     botClient.sendUpdate(new LinkUpdate(
                             link.id(), URI.create(link.url()), "new push to "+ghResponse.name(), tgChatIds
                     ));
-                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updated_at().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
+                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updatedAt().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
                             link.update_info());
                 }
                 if (!ghcResponse.sha().equals(link.update_info())){
                     botClient.sendUpdate(new LinkUpdate(
                             link.id(), URI.create(link.url()), "new commit: "+ghcResponse.commit().message(), tgChatIds
                     ));
-                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updated_at().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
+                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updatedAt().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
                             ghcResponse.sha());
                 }
             } else {
                 ListAnswersResponse soResponse = stackOverflowClient.getAnswers(res).block();
                 OffsetDateTime time = Collections.max(soResponse.items().stream()
-                        .map((StackOverflowResponse::last_edit_date))
+                        .map((StackOverflowResponse::lastActivityDate))
                         .toList());
                 if (!time.toInstant().equals(link.last_update().toInstant())){
                     if (soResponse.items().size() != Integer.parseInt(link.update_info())){
