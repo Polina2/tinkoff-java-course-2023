@@ -9,10 +9,7 @@ import ru.tinkoff.edu.java.link_parser.LinkParser;
 import ru.tinkoff.edu.java.scrapper.client.BotClient;
 import ru.tinkoff.edu.java.scrapper.client.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.client.StackOverflowClient;
-import ru.tinkoff.edu.java.scrapper.dto.GitHubReposResponse;
-import ru.tinkoff.edu.java.scrapper.dto.LinkUpdate;
-import ru.tinkoff.edu.java.scrapper.dto.ListAnswersResponse;
-import ru.tinkoff.edu.java.scrapper.dto.StackOverflowResponse;
+import ru.tinkoff.edu.java.scrapper.dto.*;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
@@ -48,13 +45,22 @@ public class LinkUpdaterScheduler {
             List<Long> tgChatIds = tgChatService.listAll(URI.create(link.url())).stream().map(TgChat::tgChatId).toList();
             String res = linkParser.parse(link.url());
 
-            if (res.matches("\\d+")){
+            if (!res.matches("\\d+")){
                 GitHubReposResponse ghResponse = gitHubClient.getRepository(res).block();
+                GitHubCommitResponse ghcResponse = gitHubClient.getLastCommit(res).blockFirst();
                 if (!ghResponse.updated_at().toInstant().equals(link.last_update().toInstant())){
                     botClient.sendUpdate(new LinkUpdate(
-                            link.id(), URI.create(link.url()), "some update", tgChatIds
+                            link.id(), URI.create(link.url()), "new push to "+ghResponse.name(), tgChatIds
                     ));
-                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updated_at().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updated_at().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
+                            link.update_info());
+                }
+                if (!ghcResponse.sha().equals(link.update_info())){
+                    botClient.sendUpdate(new LinkUpdate(
+                            link.id(), URI.create(link.url()), "new commit: "+ghcResponse.commit().message(), tgChatIds
+                    ));
+                    linkService.updateLink(link, Timestamp.valueOf(ghResponse.updated_at().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
+                            ghcResponse.sha());
                 }
             } else {
                 ListAnswersResponse soResponse = stackOverflowClient.getAnswers(res).block();
@@ -62,11 +68,15 @@ public class LinkUpdaterScheduler {
                         .map((StackOverflowResponse::last_edit_date))
                         .toList());
                 if (!time.toInstant().equals(link.last_update().toInstant())){
+                    if (soResponse.items().size() != Integer.parseInt(link.update_info())){
+                        botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
+                                "new answer", tgChatIds));
+                    }
                     botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
-                            "some update", tgChatIds));
-                    linkService.updateLink(link, Timestamp.valueOf(time.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+                            "answer updated", tgChatIds));
+                    linkService.updateLink(link, Timestamp.valueOf(time.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
+                            ""+soResponse.items().size());
                 }
-
             }
 
         }

@@ -11,5 +11,5 @@ public interface LinkService {
     void remove(long tgChatId, URI url);
     Collection<Link> listAll(long tgChatId);
     Collection<Link> listNotChecked();
-    void updateLink(Link link, Timestamp lastUpdate);
+    void updateLink(Link link, Timestamp lastUpdate, String updateInfo);
 }
