@@ -4,5 +4,5 @@ public abstract sealed class LinkParser permits GitHubLinkParser, StackOverflowL
 
     protected LinkParser successor = null;
 
-    abstract String parse(String link);
+    public abstract String parse(String link);
 }

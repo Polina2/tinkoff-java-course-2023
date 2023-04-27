@@ -5,8 +5,7 @@ import lombok.extern.java.Log;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.link_parser.GitHubLinkParser;
-import ru.tinkoff.edu.java.link_parser.StackOverflowLinkParser;
+import ru.tinkoff.edu.java.link_parser.LinkParser;
 import ru.tinkoff.edu.java.scrapper.client.BotClient;
 import ru.tinkoff.edu.java.scrapper.client.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.client.StackOverflowClient;
@@ -37,9 +36,7 @@ public class LinkUpdaterScheduler {
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
     private final BotClient botClient;
-
-    private final GitHubLinkParser gitHubLinkParser = new GitHubLinkParser();
-    private final StackOverflowLinkParser stackOverflowLinkParser = new StackOverflowLinkParser(gitHubLinkParser);
+    private final LinkParser linkParser;
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update(){
@@ -49,7 +46,7 @@ public class LinkUpdaterScheduler {
 
         for (Link link : linkList){
             List<Long> tgChatIds = tgChatService.listAll(URI.create(link.url())).stream().map(TgChat::tgChatId).toList();
-            String res = stackOverflowLinkParser.parse(link.url());
+            String res = linkParser.parse(link.url());
 
             if (res.matches("\\d+")){
                 GitHubReposResponse ghResponse = gitHubClient.getRepository(res).block();
