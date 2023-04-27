@@ -77,7 +77,10 @@ public class LinkRepository implements IRepository<Link> {
                 WHERE id = (
                 SELECT link_id
                 FROM subscription
-                WHERE chat_id = ?)""";
+                WHERE chat_id = (
+                SELECT id
+                FROM tg_chat
+                WHERE tg_chat_id = ?))""";
         List<Link> list = jdbcTemplate.query(sql,
                 (rs, rn) -> new Link(
                         rs.getLong("id"),
