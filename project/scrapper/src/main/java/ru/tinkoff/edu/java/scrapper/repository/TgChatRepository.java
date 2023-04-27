@@ -19,6 +19,14 @@ public class TgChatRepository implements IRepository<TgChat>{
         jdbcTemplate.update(sql, object.tgChatId());
     }
 
+    public Long getId(TgChat object){
+        return jdbcTemplate.query(
+                "SELECT id FROM tg_chat WHERE tg_chat_id = ?",
+                (rs, rn) -> rs.getLong("id"),
+                object.tgChatId()
+        ).get(0);
+    }
+
     @Override
     public void remove(TgChat object) {
         String sql = "DELETE FROM tg_chat WHERE tg_chat_id = ?";
@@ -28,9 +36,9 @@ public class TgChatRepository implements IRepository<TgChat>{
     @Override
     public List<TgChat> findAll() {
         String sql = "SELECT * FROM tg_chat";
-        List<TgChat> list = jdbcTemplate.query(
-                sql, (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")));
-        return list;
+        return jdbcTemplate.query(
+                sql, (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id"))
+        );
     }
 
     public List<TgChat> findByLink(String url){
