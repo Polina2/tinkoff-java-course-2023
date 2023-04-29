@@ -5,6 +5,7 @@ app:
   gitBaseUrl: https://api.github.com
   stackoverflowBaseUrl: https://api.stackexchange.com
   botBaseUrl: http://localhost:8180
+  database-access-type: jdbc
 
 springdoc:
   swagger-ui:
