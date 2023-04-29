@@ -40,7 +40,8 @@ public class JdbcLinkTest extends IntegrationEnvironment{
                         rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update"),
-                        rs.getTimestamp("last_check")
+                        rs.getTimestamp("last_check"),
+                        rs.getString("update_info")
                 ),
                 expectedLink.url()
         );
@@ -63,7 +64,8 @@ public class JdbcLinkTest extends IntegrationEnvironment{
                         rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update"),
-                        rs.getTimestamp("last_check")
+                        rs.getTimestamp("last_check"),
+                        rs.getString("update_info")
                 ),
                 link.url()
         );

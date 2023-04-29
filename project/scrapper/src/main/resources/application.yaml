@@ -17,3 +17,5 @@ spring:
     password: postgres
   liquibase:
     enabled: false
+  jpa:
+    show-sql: true
