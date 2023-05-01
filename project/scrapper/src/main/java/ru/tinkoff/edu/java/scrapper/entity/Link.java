@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,5 +31,5 @@ public class Link {
     private String updateInfo;
 
     @ManyToMany(mappedBy = "links")
-    private List<TgChat> tgChats;
+    private List<TgChat> tgChats = new ArrayList<>();
 }

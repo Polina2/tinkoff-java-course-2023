@@ -93,7 +93,7 @@ public class JpaLinkTest extends IntegrationEnvironment{
         jpaLinkRepository.save(link2);
         jpaTgChatRepository.save(tgChat);
 
-        List<Link> actualList = jpaLinkRepository.findByTgChats_TgChatId(tgChat.getTgChatId());
+        List<Link> actualList = jpaLinkRepository.findByTgChatsTgChatId(tgChat.getTgChatId());
 
         Assertions.assertEquals(
                 expectedList.stream().map(Link::getUrl).toList(),

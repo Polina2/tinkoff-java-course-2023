@@ -13,10 +13,6 @@ import java.util.List;
 @Table(name = "tg_chat")
 public class TgChat {
 
-    public TgChat(){
-        links = new ArrayList<>();
-    }
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +27,5 @@ public class TgChat {
             joinColumns = {@JoinColumn(name = "chat_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "link_id", referencedColumnName = "id")}
     )
-    private List<Link> links;
+    private List<Link> links = new ArrayList<>();
 }

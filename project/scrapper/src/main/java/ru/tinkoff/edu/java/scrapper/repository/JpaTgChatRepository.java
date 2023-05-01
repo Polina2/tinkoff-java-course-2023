@@ -13,5 +13,5 @@ public interface JpaTgChatRepository extends JpaRepository<TgChat, Long> {
 
     TgChat findByTgChatId(Long tgChatId);
 
-    List<TgChat> findByLinks_Url(String url);
+    List<TgChat> findByLinksUrl(String url);
 }

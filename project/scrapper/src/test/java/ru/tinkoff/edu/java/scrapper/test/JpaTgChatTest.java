@@ -91,7 +91,7 @@ public class JpaTgChatTest extends IntegrationEnvironment{
         tgChatRepository.save(tgChat2);
         List<TgChat> expectedList = List.of(tgChat1, tgChat2);
 
-        List<TgChat> actualList = tgChatRepository.findByLinks_Url(link.getUrl());
+        List<TgChat> actualList = tgChatRepository.findByLinksUrl(link.getUrl());
 
         Assertions.assertNotNull(actualList);
         Assertions.assertEquals(

@@ -42,7 +42,7 @@ public class JpaLinkService implements LinkService {
     @Transactional(readOnly = true)
     @Override
     public Collection<Link> listAll(long tgChatId) {
-        return linkRepository.findByTgChats_TgChatId(tgChatId).stream()
+        return linkRepository.findByTgChatsTgChatId(tgChatId).stream()
                 .map(link -> new Link(
                         link.getId(), link.getUrl(), link.getLastUpdate(),
                         link.getLastCheck(), link.getUpdateInfo())

@@ -15,7 +15,7 @@ public interface JpaLinkRepository extends JpaRepository<Link, Long> {
 
     Link findByUrl(String url);
 
-    List<Link> findByTgChats_TgChatId(Long tgChatId);
+    List<Link> findByTgChatsTgChatId(Long tgChatId);
 
     List<Link> findByLastCheckLessThan(Timestamp maxTime);
 

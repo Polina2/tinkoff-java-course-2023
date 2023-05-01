@@ -31,7 +31,7 @@ public class JpaTgChatService implements TgChatService {
     @Transactional(readOnly = true)
     @Override
     public Collection<TgChat> listAll(URI link) {
-        return tgChatRepository.findByLinks_Url(link.toString()).stream()
+        return tgChatRepository.findByLinksUrl(link.toString()).stream()
                 .map(tgChat -> new TgChat(tgChat.getId(), tgChat.getTgChatId())).toList();
     }
 }
