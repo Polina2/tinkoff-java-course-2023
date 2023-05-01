@@ -21,22 +21,26 @@ public class JdbcLinkService implements LinkService {
     private final TgChatRepository tgChatRepository;
 
     @Override
-    public void add(long tgChatId, URI url) {
+    public Link add(long tgChatId, URI url) {
         Link link = new Link(url.toString());
         linkRepository.add(link);
         Long linkId = linkRepository.getId(link);
         Long chatId = tgChatRepository.getId(new TgChat(tgChatId));
         subscriptionRepository.add(new Subscription(chatId, linkId));
+        return link;
     }
 
     @Override
-    public void remove(long tgChatId, URI url) {
-        Long linkId = linkRepository.getId(new Link(url.toString()));
+    public Link remove(long tgChatId, URI url) {
+        Link link = new Link(url.toString());
+        Long linkId = linkRepository.getId(link);
         Long chatId = tgChatRepository.getId(new TgChat(tgChatId));
         subscriptionRepository.remove(new Subscription(chatId, linkId));
 
         if (subscriptionRepository.findAll().stream().filter(s -> s.linkId().equals(linkId)).toList().size() == 0)
-            linkRepository.remove(new Link(url.toString()));
+            linkRepository.remove(link);
+
+        return link;
     }
 
     @Override

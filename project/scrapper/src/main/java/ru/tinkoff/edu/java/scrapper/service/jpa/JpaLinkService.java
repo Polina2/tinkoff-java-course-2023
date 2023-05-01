@@ -21,7 +21,7 @@ public class JpaLinkService implements LinkService {
 
     @Transactional
     @Override
-    public void add(long tgChatId, URI url) {
+    public Link add(long tgChatId, URI url) {
         ru.tinkoff.edu.java.scrapper.entity.Link link = new ru.tinkoff.edu.java.scrapper.entity.Link();
         link.setUrl(url.toString());
         linkRepository.save(link);
@@ -29,14 +29,17 @@ public class JpaLinkService implements LinkService {
         link = linkRepository.findByUrl(link.getUrl());
         tgChat.getLinks().add(link);
         tgChatRepository.save(tgChat);
+        return new Link(link.getId(), link.getUrl(), link.getLastUpdate(), link.getLastCheck(), link.getUpdateInfo());
     }
 
     @Transactional
     @Override
-    public void remove(long tgChatId, URI url) {
+    public Link remove(long tgChatId, URI url) {
         TgChat tgChat = tgChatRepository.findByTgChatId(tgChatId);
-        tgChat.getLinks().remove(linkRepository.findByUrl(url.toString()));
+        ru.tinkoff.edu.java.scrapper.entity.Link link = linkRepository.findByUrl(url.toString());
+        tgChat.getLinks().remove(link);
         tgChatRepository.save(tgChat);
+        return new Link(link.getId(), link.getUrl(), link.getLastUpdate(), link.getLastCheck(), link.getUpdateInfo());
     }
 
     @Transactional(readOnly = true)

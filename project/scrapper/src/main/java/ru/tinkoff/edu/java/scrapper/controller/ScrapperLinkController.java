@@ -28,12 +28,14 @@ public class ScrapperLinkController {
     }
 
     @PostMapping
-    public void addLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody AddLinkRequest link){
-        linkService.add(tgChatId, link.link());
+    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody AddLinkRequest link){
+        Link linkDto = linkService.add(tgChatId, link.link());
+        return new LinkResponse(linkDto.id(), URI.create(linkDto.url()));
     }
 
     @DeleteMapping
-    public void deleteLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody RemoveLinkRequest link){
-        linkService.remove(tgChatId, link.link());
+    public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody RemoveLinkRequest link){
+        Link linkDto = linkService.remove(tgChatId, link.link());
+        return new LinkResponse(linkDto.id(), URI.create(linkDto.url()));
     }
 }
