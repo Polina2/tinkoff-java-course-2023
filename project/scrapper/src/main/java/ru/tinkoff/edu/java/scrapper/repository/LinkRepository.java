@@ -43,7 +43,8 @@ public class LinkRepository implements IRepository<Link> {
                         rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update"),
-                        rs.getTimestamp("last_check")
+                        rs.getTimestamp("last_check"),
+                        rs.getString("update_info")
                 ));
     }
 
@@ -63,7 +64,8 @@ public class LinkRepository implements IRepository<Link> {
                         rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update"),
-                        rs.getTimestamp("last_check")
+                        rs.getTimestamp("last_check"),
+                        rs.getString("update_info")
                 ), tgChatId);
         return list;
     }
@@ -75,7 +77,8 @@ public class LinkRepository implements IRepository<Link> {
                         rs.getLong("id"),
                         rs.getString("url"),
                         rs.getTimestamp("last_update"),
-                        rs.getTimestamp("last_check")
+                        rs.getTimestamp("last_check"),
+                        rs.getString("update_info")
                 ));
 
         for (Link link : list){
