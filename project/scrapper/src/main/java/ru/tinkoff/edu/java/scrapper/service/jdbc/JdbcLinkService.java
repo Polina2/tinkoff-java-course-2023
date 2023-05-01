@@ -1,7 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Subscription;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
@@ -14,7 +13,6 @@ import java.net.URI;
 import java.sql.Timestamp;
 import java.util.Collection;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
 
