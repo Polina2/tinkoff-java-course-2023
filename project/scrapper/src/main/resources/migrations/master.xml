@@ -9,4 +9,5 @@
     <include file="01-link.sql"/>
     <include file="02-tg_chat.sql"/>
     <include file="03-subscription.sql"/>
+    <include file="04-link.sql"/>
 </databaseChangeLog>

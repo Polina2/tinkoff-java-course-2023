@@ -4,6 +4,7 @@ app:
     interval: 10000
   gitBaseUrl: https://api.github.com
   stackoverflowBaseUrl: https://api.stackexchange.com
+  botBaseUrl: http://localhost:8180
 
 springdoc:
   swagger-ui:
@@ -14,3 +15,5 @@ spring:
     url: jdbc:postgresql://localhost:5433/scrapper
     username: postgres
     password: postgres
+  liquibase:
+    enabled: false

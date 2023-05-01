@@ -1,0 +1,59 @@
+package ru.tinkoff.edu.java.scrapper.service.jdbc;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
+import ru.tinkoff.edu.java.scrapper.dto.db_dto.Subscription;
+import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
+import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
+import ru.tinkoff.edu.java.scrapper.repository.SubscriptionRepository;
+import ru.tinkoff.edu.java.scrapper.repository.TgChatRepository;
+import ru.tinkoff.edu.java.scrapper.service.LinkService;
+
+import java.net.URI;
+import java.sql.Timestamp;
+import java.util.Collection;
+
+@Service
+@RequiredArgsConstructor
+public class JdbcLinkService implements LinkService {
+
+    private final LinkRepository linkRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final TgChatRepository tgChatRepository;
+
+    @Override
+    public void add(long tgChatId, URI url) {
+        Link link = new Link(url.toString());
+        linkRepository.add(link);
+        Long linkId = linkRepository.getId(link);
+        Long chatId = tgChatRepository.getId(new TgChat(tgChatId));
+        subscriptionRepository.add(new Subscription(chatId, linkId));
+    }
+
+    @Override
+    public void remove(long tgChatId, URI url) {
+        Long linkId = linkRepository.getId(new Link(url.toString()));
+        Long chatId = tgChatRepository.getId(new TgChat(tgChatId));
+        subscriptionRepository.remove(new Subscription(chatId, linkId));
+
+        if (subscriptionRepository.findAll().stream().filter(s -> s.linkId().equals(linkId)).toList().size() == 0)
+            linkRepository.remove(new Link(url.toString()));
+    }
+
+    @Override
+    public Collection<Link> listAll(long tgChatId) {
+        return linkRepository.findByTgChatId(tgChatId);
+    }
+
+    @Override
+    public Collection<Link> listNotChecked() {
+        return linkRepository.findNotChecked();
+    }
+
+    @Override
+    public void updateLink(Link link, Timestamp lastUpdate) {
+        linkRepository.updateLink(link, lastUpdate);
+    }
+
+}

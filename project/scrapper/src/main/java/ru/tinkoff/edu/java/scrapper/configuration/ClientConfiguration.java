@@ -16,4 +16,9 @@ public class ClientConfiguration {
     public WebClient stackOverflowWebClient(@Value("${app.stackoverflowBaseUrl:https://api.stackexchange.com}") String baseUrl){
         return WebClient.builder().baseUrl(baseUrl).build();
     }
+
+    @Bean
+    public WebClient botWebClient(@Value("${app.botBaseUrl:http://localhost:8180}") String baseUrl){
+        return WebClient.builder().baseUrl(baseUrl).build();
+    }
 }
