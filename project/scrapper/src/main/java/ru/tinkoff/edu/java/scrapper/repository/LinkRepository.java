@@ -52,7 +52,7 @@ public class LinkRepository implements IRepository<Link> {
         String sql = """
                 SELECT *
                 FROM link
-                WHERE id = (
+                WHERE id IN (
                 SELECT link_id
                 FROM subscription
                 WHERE chat_id = (

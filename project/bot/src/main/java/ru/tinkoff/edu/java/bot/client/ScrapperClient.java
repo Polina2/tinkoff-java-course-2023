@@ -18,12 +18,12 @@ public class ScrapperClient {
 
     public void addChat(Long id){
         String path = "/tg-chat/{id}";
-        webClient.post().uri(path, id).retrieve();
+        webClient.post().uri(path, id).retrieve().bodyToMono(Void.class).subscribe();
     }
 
     public void deleteChat(Long id){
         String path = "/tg-chat/{id}";
-        webClient.delete().uri(path, id).retrieve();
+        webClient.delete().uri(path, id).retrieve().bodyToMono(Void.class).subscribe();
     }
 
     public Mono<LinkResponse> addLink(Long tgChatId, AddLinkRequest addLinkRequest){

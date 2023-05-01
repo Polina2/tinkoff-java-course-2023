@@ -27,7 +27,7 @@ public class JdbcLinkService implements LinkService {
         Long linkId = linkRepository.getId(link);
         Long chatId = tgChatRepository.getId(new TgChat(tgChatId));
         subscriptionRepository.add(new Subscription(chatId, linkId));
-        return link;
+        return new Link(linkId, link.url(), null, null, null);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class JdbcLinkService implements LinkService {
         if (subscriptionRepository.findAll().stream().filter(s -> s.linkId().equals(linkId)).toList().size() == 0)
             linkRepository.remove(link);
 
-        return link;
+        return new Link(linkId, link.url(), null, null, null);
     }
 
     @Override
