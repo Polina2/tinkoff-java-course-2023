@@ -35,5 +35,6 @@ public class ScrapperLinkController {
     @DeleteMapping
     public void deleteLink(@RequestHeader("Tg-Chat-Id") Long tgChatId, @RequestBody RemoveLinkRequest link){
         linkService.remove(tgChatId, link.link());
+
     }
 }

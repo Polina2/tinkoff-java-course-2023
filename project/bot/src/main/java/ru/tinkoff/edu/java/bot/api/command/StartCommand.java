@@ -18,7 +18,7 @@ public class StartCommand implements Command {
 
     @Override
     public String description() {
-        return "Начать";
+        return "Зарегистрировать пользователя";
     }
 
     @Override
