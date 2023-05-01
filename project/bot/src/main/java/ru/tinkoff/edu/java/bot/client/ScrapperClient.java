@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.tinkoff.edu.java.bot.dto.AddLinkRequest;
+import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
 import ru.tinkoff.edu.java.bot.dto.RemoveLinkRequest;
 
@@ -25,22 +26,24 @@ public class ScrapperClient {
         webClient.delete().uri(path, id).retrieve();
     }
 
-    public void addLink(Long tgChatId, AddLinkRequest addLinkRequest){
+    public Mono<LinkResponse> addLink(Long tgChatId, AddLinkRequest addLinkRequest){
         String path = "/links";
-        webClient.post()
+        return webClient.post()
                 .uri(path)
                 .header("Tg-Chat-Id", tgChatId.toString())
                 .bodyValue(addLinkRequest)
-                .retrieve();
+                .retrieve()
+                .bodyToMono(LinkResponse.class);
     }
 
-    public void deleteLink(Long tgChatId, RemoveLinkRequest removeLinkRequest){
+    public Mono<LinkResponse> deleteLink(Long tgChatId, RemoveLinkRequest removeLinkRequest){
         String path = "/links";
-        webClient.method(HttpMethod.DELETE)
+        return webClient.method(HttpMethod.DELETE)
                 .uri(path)
                 .header("Tg-Chat-Id", tgChatId.toString())
                 .bodyValue(removeLinkRequest)
-                .retrieve();
+                .retrieve()
+                .bodyToMono(LinkResponse.class);
     }
 
     public Mono<ListLinksResponse> getLinks(Long tgChatId){

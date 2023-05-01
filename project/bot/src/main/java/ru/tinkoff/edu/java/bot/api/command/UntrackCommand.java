@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.ScrapperClient;
+import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 import ru.tinkoff.edu.java.bot.dto.RemoveLinkRequest;
 
 import java.net.URI;
@@ -34,8 +35,8 @@ public class UntrackCommand implements Command{
             return "Введите ссылку";
         } else {
             //check link
-            client.deleteLink(update.message().chat().id(), new RemoveLinkRequest(URI.create(text)));
-            return "Ссылка удалена из списка";
+            LinkResponse response = client.deleteLink(update.message().chat().id(), new RemoveLinkRequest(URI.create(text))).block();
+            return "Ссылка " + response.url() + " удалена из списка";
         }
     }
 

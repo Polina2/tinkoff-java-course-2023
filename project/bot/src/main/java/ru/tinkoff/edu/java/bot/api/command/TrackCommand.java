@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.ScrapperClient;
 import ru.tinkoff.edu.java.bot.dto.AddLinkRequest;
+import ru.tinkoff.edu.java.bot.dto.LinkResponse;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -34,8 +35,8 @@ public class TrackCommand implements Command{
             return "Введите ссылку";
         } else {
             //check link
-            client.addLink(update.message().chat().id(), new AddLinkRequest(URI.create(text)));
-            return "Ссылка добавлена в список";
+            LinkResponse linkResponse = client.addLink(update.message().chat().id(), new AddLinkRequest(URI.create(text))).block();
+            return "Ссылка " + linkResponse.id() + ' ' + linkResponse.url() + " добавлена в список";
         }
     }
 
