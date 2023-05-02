@@ -6,6 +6,10 @@ app:
   stackoverflowBaseUrl: https://api.stackexchange.com
   botBaseUrl: http://localhost:8180
   database-access-type: jdbc
+  rabbitmq:
+    exchange: directExchange
+    queue: queue
+    routingKey: directRoutingKey
 
 springdoc:
   swagger-ui:
