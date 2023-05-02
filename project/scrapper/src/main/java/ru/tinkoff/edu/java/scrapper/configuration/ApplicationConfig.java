@@ -10,6 +10,6 @@ import ru.tinkoff.edu.java.scrapper.scheduler.Scheduler;
 public record ApplicationConfig (
         @NotNull String test, Scheduler scheduler,
         String gitBaseUrl, String stackoverflowBaseUrl, String botBaseUrl,
-        AccessType databaseAccessType, RabbitMQProperties rabbitmq
+        AccessType databaseAccessType, RabbitMQProperties rabbitmq, boolean useQueue
 ) {
 }

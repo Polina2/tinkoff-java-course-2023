@@ -10,6 +10,7 @@ app:
     exchange: directExchange
     queue: queue
     routingKey: directRoutingKey
+  useQueue: true
 
 springdoc:
   swagger-ui:

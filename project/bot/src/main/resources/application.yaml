@@ -2,6 +2,10 @@ app:
   test: it works
   token: ${TOKEN}
   baseUrl: http://localhost:8080
+  rabbitmq:
+    exchange: directExchange
+    queue: queue
+    routingKey: directRoutingKey
 
 server:
   port: 8180
