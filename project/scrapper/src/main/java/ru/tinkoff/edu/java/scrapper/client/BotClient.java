@@ -13,6 +13,6 @@ public class BotClient {
 
     public void sendUpdate(LinkUpdate linkUpdate){
         String path = "/updates";
-        botWebClient.post().uri(path).bodyValue(linkUpdate).retrieve();
+        botWebClient.post().uri(path).bodyValue(linkUpdate).retrieve().bodyToMono(Void.class).subscribe();
     }
 }

@@ -48,7 +48,7 @@ public class LinkUpdaterScheduler {
             if (!res.matches("\\d+")){
                 GitHubReposResponse ghResponse = gitHubClient.getRepository(res).block();
                 GitHubCommitResponse ghcResponse = gitHubClient.getLastCommit(res).blockFirst();
-                if (!ghResponse.updatedAt().toInstant().equals(link.last_update().toInstant())){
+                if (link.last_update() == null || !ghResponse.updatedAt().toInstant().equals(link.last_update().toInstant())){
                     botClient.sendUpdate(new LinkUpdate(
                             link.id(), URI.create(link.url()), "new push to "+ghResponse.name(), tgChatIds
                     ));
@@ -67,13 +67,14 @@ public class LinkUpdaterScheduler {
                 OffsetDateTime time = Collections.max(soResponse.items().stream()
                         .map((StackOverflowResponse::lastActivityDate))
                         .toList());
-                if (!time.toInstant().equals(link.last_update().toInstant())){
-                    if (soResponse.items().size() != Integer.parseInt(link.update_info())){
+                if (link.last_update() == null || !time.toInstant().equals(link.last_update().toInstant())){
+                    if (link.update_info()==null || soResponse.items().size() != Integer.parseInt(link.update_info())){
                         botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
                                 "new answer", tgChatIds));
+                    } else {
+                        botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
+                                "answer updated", tgChatIds));
                     }
-                    botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
-                            "answer updated", tgChatIds));
                     linkService.updateLink(link, Timestamp.valueOf(time.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
                             ""+soResponse.items().size());
                 }

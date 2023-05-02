@@ -89,7 +89,9 @@ public class LinkRepository implements IRepository<Link> {
         return list;
     }
 
-    public void updateLink(Link link, Timestamp lastUpdate){
-        jdbcTemplate.update("UPDATE link SET last_update = ? WHERE id = ?", lastUpdate, link.id());
+    public void updateLink(Link link, Timestamp lastUpdate, String updateInfo){
+        jdbcTemplate.update(
+                "UPDATE link SET last_update = ?, update_info = ? WHERE id = ?", lastUpdate, updateInfo, link.id()
+        );
     }
 }

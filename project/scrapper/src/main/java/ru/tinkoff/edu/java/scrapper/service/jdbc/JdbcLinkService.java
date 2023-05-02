@@ -55,7 +55,7 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public void updateLink(Link link, Timestamp lastUpdate, String updateInfo) {
-        linkRepository.updateLink(link, lastUpdate);
+        linkRepository.updateLink(link, lastUpdate, updateInfo);
     }
 
 }
