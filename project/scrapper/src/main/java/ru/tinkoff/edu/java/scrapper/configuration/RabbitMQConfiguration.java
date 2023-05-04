@@ -13,19 +13,23 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfiguration {
+    @Value("${app.rabbitmq.queue}")
+    private String queueName;
     @Bean
     public DirectExchange directExchange(@Value("${app.rabbitmq.exchange}") String name){
         return new DirectExchange(name);
     }
 
     @Bean
-    public Queue queue(@Value("${app.rabbitmq.queue}") String name){
-        return new Queue(name);
+    public Binding binding(Queue queue, DirectExchange directExchange, @Value("${app.rabbitmq.routingKey}") String routingKey){
+        return BindingBuilder.bind(queue).to(directExchange).with(routingKey);
     }
 
     @Bean
-    public Binding binding(Queue queue, Exchange exchange, @Value("${app.rabbitmq.routingKey}") String routingKey){
-        return BindingBuilder.bind(queue).to(exchange).with(routingKey).noargs();
+    Queue queue() {
+        return QueueBuilder.durable(queueName)
+                .withArgument("x-dead-letter-exchange", queueName + ".dlx")
+                .build();
     }
 
     @Bean
@@ -49,9 +53,7 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory, Queue queue){
-        AmqpAdmin amqpAdmin = new RabbitAdmin(connectionFactory);
-        amqpAdmin.declareQueue(queue);
-        return amqpAdmin;
+    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory){
+        return new RabbitAdmin(connectionFactory);
     }
 }

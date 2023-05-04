@@ -1,6 +1,6 @@
 package ru.tinkoff.edu.java.bot.configuration;
 
-import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -9,6 +9,7 @@ import org.springframework.amqp.support.converter.ClassMapper;
 import org.springframework.amqp.support.converter.DefaultClassMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.dto.LinkUpdate;
@@ -18,6 +19,30 @@ import java.util.Map;
 
 @Configuration
 public class RabbitMQConfiguration {
+    @Value("${app.rabbitmq.queue}")
+    private String queueName;
+
+    @Bean
+    Queue queue() {
+        return QueueBuilder.durable(queueName)
+                .withArgument("x-dead-letter-exchange", queueName + ".dlx")
+                .build();
+    }
+
+    @Bean
+    public FanoutExchange deadLetterExchange(){
+        return new FanoutExchange(queueName + ".dlx");
+    }
+
+    @Bean
+    public Queue deadLetterQueue(){
+        return QueueBuilder.durable(queueName + ".dlq").build();
+    }
+
+    @Bean
+    public Binding deadLetterBinding(Queue deadLetterQueue, FanoutExchange deadLetterExchange){
+        return BindingBuilder.bind(deadLetterQueue).to(deadLetterExchange);
+    }
 
     @Bean
     public ClassMapper classMapper(){
