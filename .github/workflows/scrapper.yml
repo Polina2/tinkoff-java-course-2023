@@ -2,8 +2,8 @@ name: scrapper
 on:
   push:
     paths-ignore:
-      - 'bot/**'
-      - 'link-parser/**'
+      - 'project/bot/**'
+      - 'project/link-parser/**'
 jobs:
   build:
     runs-on: ubuntu-latest
