@@ -15,9 +15,11 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfiguration {
     @Value("${app.rabbitmq.queue}")
     private String queueName;
+    @Value("${app.rabbitmq.exchange}")
+    private String exchangeName;
     @Bean
-    public DirectExchange directExchange(@Value("${app.rabbitmq.exchange}") String name){
-        return new DirectExchange(name);
+    public DirectExchange directExchange(){
+        return new DirectExchange(exchangeName);
     }
 
     @Bean
@@ -28,7 +30,7 @@ public class RabbitMQConfiguration {
     @Bean
     Queue queue() {
         return QueueBuilder.durable(queueName)
-                .withArgument("x-dead-letter-exchange", queueName + ".dlx")
+                .withArgument("x-dead-letter-exchange", exchangeName + ".dlx")
                 .build();
     }
 

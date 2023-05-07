@@ -21,17 +21,19 @@ import java.util.Map;
 public class RabbitMQConfiguration {
     @Value("${app.rabbitmq.queue}")
     private String queueName;
+    @Value("${app.rabbitmq.exchange}")
+    private String exchangeName;
 
     @Bean
     Queue queue() {
         return QueueBuilder.durable(queueName)
-                .withArgument("x-dead-letter-exchange", queueName + ".dlx")
+                .withArgument("x-dead-letter-exchange", exchangeName + ".dlx")
                 .build();
     }
 
     @Bean
     public FanoutExchange deadLetterExchange(){
-        return new FanoutExchange(queueName + ".dlx");
+        return new FanoutExchange(exchangeName + ".dlx");
     }
 
     @Bean
