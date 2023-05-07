@@ -3,7 +3,6 @@ on:
   push:
     paths-ignore:
       - 'project/bot/**'
-      - 'project/link-parser/**'
       - '**/bot.yml'
 jobs:
   build:
@@ -17,6 +16,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: build with maven
-        run: |
-          cd project
-          mvn package -pl scrapper -am
+        run: mvn package -pl scrapper -am

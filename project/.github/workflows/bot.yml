@@ -17,6 +17,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: build with maven
-        run: |
-          cd project
-          mvn package -pl bot -am
+        run: mvn package -pl bot -am
