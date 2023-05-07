@@ -1,0 +1,22 @@
+name: bot
+on:
+  push:
+    paths-ignore:
+      - 'project/scrapper/**'
+      - 'project/link-parser/**'
+      - '**/scrapper.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup jdk
+        uses: actions/setup-java@v3
+        with:
+          java-version: 19
+          distribution: 'temurin'
+          cache: maven
+      - name: build with maven
+        run: |
+          cd project
+          mvn package -pl bot -am
