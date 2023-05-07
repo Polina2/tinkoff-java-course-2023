@@ -4,6 +4,7 @@ on:
     paths-ignore:
       - 'project/bot/**'
       - 'project/link-parser/**'
+      - '**/bot.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
