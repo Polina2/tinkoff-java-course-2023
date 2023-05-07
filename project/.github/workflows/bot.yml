@@ -2,8 +2,8 @@ name: bot
 on:
   push:
     paths-ignore:
-      - 'project/scrapper/**'
-      - 'project/link-parser/**'
+      - 'scrapper/**'
+      - 'link-parser/**'
       - '**/scrapper.yml'
 jobs:
   build:

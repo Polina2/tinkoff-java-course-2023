@@ -2,7 +2,7 @@ name: scrapper
 on:
   push:
     paths-ignore:
-      - 'project/bot/**'
+      - 'bot/**'
       - '**/bot.yml'
 jobs:
   build:
