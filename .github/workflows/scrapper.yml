@@ -32,3 +32,4 @@ jobs:
         with:
           push: true
           tags: ghcr.io/${{ github.event.repository.name }}/scrapper:latest
+          file: scrapper.Dockerfile
