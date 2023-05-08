@@ -20,3 +20,5 @@ jobs:
         run: |
           cd project
           mvn package -pl bot -am
+      - name: build docker image
+        run: docker build -f bot.Dockerfile -t bot .
