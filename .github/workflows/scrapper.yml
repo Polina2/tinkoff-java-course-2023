@@ -21,3 +21,14 @@ jobs:
           mvn package -pl scrapper -am
       - name: build docker image
         run: docker build -f scrapper.Dockerfile -t scrapper .
+      - name: log in to container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/scrapper:latest
