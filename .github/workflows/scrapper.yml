@@ -44,8 +44,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: scrapper.Dockerfile
   checkstyle:
+    runs-on: ubuntu-latest
     steps:
       - run: mvn -pl scrapper -am checkstyle:check
   start:
+    runs-on: ubuntu-latest
     steps:
       - run: docker run --name scrapper scrapper

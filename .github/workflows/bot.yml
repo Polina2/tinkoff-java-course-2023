@@ -45,8 +45,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: bot.Dockerfile
   checkstyle:
+    runs-on: ubuntu-latest
     steps:
       - run: mvn -pl bot -am checkstyle:check
   start:
+    runs-on: ubuntu-latest
     steps:
       - run: docker run --name bot bot
