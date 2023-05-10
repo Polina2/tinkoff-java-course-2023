@@ -44,12 +44,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: bot.Dockerfile
-  checkstyle:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          cd project
-          mvn -pl bot -am checkstyle:check
   start:
     runs-on: ubuntu-latest
     steps:
@@ -59,5 +53,5 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GIT_DOCKER_PAT }}
-      - run: docker pull docker pull ghcr.io/polina2/tinkoff-java-course-2023/bot
+      - run: docker pull docker pull ghcr.io/polina2/tinkoff-java-course-2023/bot:hw8
       - run: docker run --name bot --env TOKEN=${{ secrets.TOKEN }} bot

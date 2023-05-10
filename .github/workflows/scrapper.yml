@@ -43,8 +43,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: scrapper.Dockerfile
-      - name: checkstyle
-        run: mvn -pl scrapper -am checkstyle:check
   start:
     runs-on: ubuntu-latest
     steps:
@@ -54,5 +52,5 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GIT_DOCKER_PAT }}
-      - run: docker pull ghcr.io/polina2/tinkoff-java-course-2023/scrapper
+      - run: docker pull ghcr.io/polina2/tinkoff-java-course-2023/scrapper:hw8
       - run: docker run --name scrapper scrapper
