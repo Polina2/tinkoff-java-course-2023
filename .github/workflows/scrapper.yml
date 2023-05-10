@@ -46,8 +46,17 @@ jobs:
   checkstyle:
     runs-on: ubuntu-latest
     steps:
-      - run: mvn -pl scrapper -am checkstyle:check
+      - run: |
+          cd project
+          mvn -pl scrapper -am checkstyle:check
   start:
     runs-on: ubuntu-latest
     steps:
+      - name: log in to container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GIT_DOCKER_PAT }}
+      - run: docker pull ghcr.io/${{ github.repository }}/scrapper
       - run: docker run --name scrapper scrapper
