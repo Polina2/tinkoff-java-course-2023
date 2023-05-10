@@ -53,5 +53,5 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GIT_DOCKER_PAT }}
-      - run: docker pull docker pull ghcr.io/polina2/tinkoff-java-course-2023/bot:hw8
-      - run: docker run --name bot --env TOKEN=${{ secrets.TOKEN }} bot
+      - run: docker pull ghcr.io/polina2/tinkoff-java-course-2023/bot:hw8
+      - run: docker run --name bot --env TOKEN=${{ secrets.TOKEN }} bot:hw8
