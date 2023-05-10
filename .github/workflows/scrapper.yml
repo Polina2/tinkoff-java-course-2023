@@ -1,6 +1,9 @@
 name: scrapper
 on:
   push:
+    branches:
+      - 'main'
+      - 'hw8'
     paths-ignore:
       - 'project/bot/**'
       - '**/bot.yml'

@@ -17,10 +17,10 @@ public class BotController {
     private final BotImplementation bot;
 
     @PostMapping
-    public void sendUpdate(@RequestBody LinkUpdate linkUpdate){
-        for (Long id : linkUpdate.tgChatIds()){
+    public void sendUpdate(@RequestBody LinkUpdate linkUpdate) {
+        for (Long id : linkUpdate.tgChatIds()) {
             bot.sendUpdate(new SendMessage(id,
-                    linkUpdate.url().toString()+": "+linkUpdate.description()));
+                    linkUpdate.url().toString() + ": " + linkUpdate.description()));
         }
     }
 }

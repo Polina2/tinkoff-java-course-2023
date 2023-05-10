@@ -14,9 +14,10 @@ public class BotImplementation {
 
     private TelegramBot bot;
     private final UserMessageProcessor ump;
-    public void start(){
+
+    public void start() {
         bot.setUpdatesListener(list -> {
-            for (Update update : list){
+            for (Update update : list) {
                 SendMessage message = ump.process(update);
                 SendResponse response = bot.execute(message);
             }
@@ -24,15 +25,11 @@ public class BotImplementation {
         });
     }
 
-    public void sendUpdate(SendMessage message){
+    public void sendUpdate(SendMessage message) {
         bot.execute(message);
     }
 
-    public void setToken(String token){
+    public void setToken(String token) {
         bot = new TelegramBot(token);
     }
-
-//    public BotImplementation(String token){
-//        bot = new TelegramBot(token);
-//    }
 }

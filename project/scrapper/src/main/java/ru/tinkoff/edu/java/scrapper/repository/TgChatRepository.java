@@ -1,15 +1,16 @@
 package ru.tinkoff.edu.java.scrapper.repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Repository
-public class TgChatRepository implements IRepository<TgChat>{
+public class TgChatRepository implements IRepository<TgChat> {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -19,7 +20,7 @@ public class TgChatRepository implements IRepository<TgChat>{
         jdbcTemplate.update(sql, object.tgChatId());
     }
 
-    public Long getId(TgChat object){
+    public Long getId(TgChat object) {
         return jdbcTemplate.query(
                 "SELECT id FROM tg_chat WHERE tg_chat_id = ?",
                 (rs, rn) -> rs.getLong("id"),
@@ -37,11 +38,11 @@ public class TgChatRepository implements IRepository<TgChat>{
     public List<TgChat> findAll() {
         String sql = "SELECT * FROM tg_chat";
         return jdbcTemplate.query(
-                sql, (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id"))
+                sql, this::mapper
         );
     }
 
-    public List<TgChat> findByLink(String url){
+    public List<TgChat> findByLink(String url) {
         String sql = """
                 SELECT * FROM tg_chat
                 WHERE id = (
@@ -51,7 +52,11 @@ public class TgChatRepository implements IRepository<TgChat>{
                 WHERE url = ?))
                 """;
         return jdbcTemplate.query(
-                sql, (rs, rn) -> new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id")), url
+                sql, this::mapper, url
         );
+    }
+
+    private TgChat mapper(ResultSet rs, int rn) throws SQLException {
+        return new TgChat(rs.getLong("id"), rs.getLong("tg_chat_id"));
     }
 }

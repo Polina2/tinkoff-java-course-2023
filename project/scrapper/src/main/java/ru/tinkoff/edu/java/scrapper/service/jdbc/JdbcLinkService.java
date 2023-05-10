@@ -1,5 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
+import java.net.URI;
+import java.sql.Timestamp;
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Subscription;
@@ -8,10 +11,6 @@ import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.SubscriptionRepository;
 import ru.tinkoff.edu.java.scrapper.repository.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
-
-import java.net.URI;
-import java.sql.Timestamp;
-import java.util.Collection;
 
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
@@ -37,8 +36,9 @@ public class JdbcLinkService implements LinkService {
         Long chatId = tgChatRepository.getId(new TgChat(tgChatId));
         subscriptionRepository.remove(new Subscription(chatId, linkId));
 
-        if (subscriptionRepository.findAll().stream().filter(s -> s.linkId().equals(linkId)).toList().size() == 0)
+        if (subscriptionRepository.findAll().stream().filter(s -> s.linkId().equals(linkId)).toList().size() == 0) {
             linkRepository.remove(link);
+        }
 
         return new Link(linkId, link.url(), null, null, null);
     }

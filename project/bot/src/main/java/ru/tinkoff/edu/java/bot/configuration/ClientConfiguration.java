@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ClientConfiguration {
 
     @Bean
-    public WebClient webClient(@Value("${app.baseUrl:http://localhost:8080}") String baseUrl){
+    public WebClient webClient(@Value("${app.baseUrl:http://localhost:8080}") String baseUrl) {
         return WebClient.builder().baseUrl(baseUrl).build();
     }
 

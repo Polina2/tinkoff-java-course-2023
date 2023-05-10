@@ -15,12 +15,12 @@ import ru.tinkoff.edu.java.scrapper.service.jpa.JpaTgChatService;
 public class JpaAccessConfiguration {
 
     @Bean
-    public LinkService linkService(JpaLinkRepository linkRepository, JpaTgChatRepository tgChatRepository){
+    public LinkService linkService(JpaLinkRepository linkRepository, JpaTgChatRepository tgChatRepository) {
         return new JpaLinkService(linkRepository, tgChatRepository);
     }
 
     @Bean
-    public TgChatService tgChatService(JpaTgChatRepository tgChatRepository){
+    public TgChatService tgChatService(JpaTgChatRepository tgChatRepository) {
         return new JpaTgChatService(tgChatRepository);
     }
 }

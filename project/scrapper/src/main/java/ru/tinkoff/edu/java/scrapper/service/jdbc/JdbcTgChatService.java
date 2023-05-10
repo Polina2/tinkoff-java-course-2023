@@ -1,12 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
+import java.net.URI;
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
 import ru.tinkoff.edu.java.scrapper.repository.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.service.TgChatService;
-
-import java.net.URI;
-import java.util.Collection;
 
 @RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {

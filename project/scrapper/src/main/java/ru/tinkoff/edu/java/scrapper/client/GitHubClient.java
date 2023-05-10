@@ -13,9 +13,10 @@ import ru.tinkoff.edu.java.scrapper.dto.GitHubReposResponse;
 public class GitHubClient {
 
     private final WebClient gitHubWebClient;
+    private static final String REPO_PATH = "/repos/";
 
-    public Mono<GitHubReposResponse> getRepository(String repository){
-        String path = "/repos/" + repository;
+    public Mono<GitHubReposResponse> getRepository(String repository) {
+        String path = REPO_PATH + repository;
         Mono<GitHubReposResponse> response = gitHubWebClient.get()
                 .uri(path)
                 .retrieve()
@@ -23,8 +24,8 @@ public class GitHubClient {
         return response;
     }
 
-    public Flux<GitHubCommitResponse> getLastCommit(String repository){
-        String path = "/repos/" + repository + "/commits";
+    public Flux<GitHubCommitResponse> getLastCommit(String repository) {
+        String path = REPO_PATH + repository + "/commits";
         Flux<GitHubCommitResponse> response = gitHubWebClient.get()
                 .uri(path)
                 .retrieve()
