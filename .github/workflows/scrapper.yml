@@ -43,3 +43,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: scrapper.Dockerfile
+  checkstyle:
+    steps:
+      - run: mvn -pl scrapper -am checkstyle:check
+  start:
+    steps:
+      - run: docker run --name scrapper scrapper

@@ -44,3 +44,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: bot.Dockerfile
+  checkstyle:
+    steps:
+      - run: mvn -pl bot -am checkstyle:check
+  start:
+    steps:
+      - run: docker run --name bot bot
