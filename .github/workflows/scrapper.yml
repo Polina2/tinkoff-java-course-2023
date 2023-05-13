@@ -46,6 +46,7 @@ jobs:
   start:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - run: docker compose -f ./project/scrapper/src/main/resources/docker-compose.yml up -d
       - name: log in to container registry
         uses: docker/login-action@v1
