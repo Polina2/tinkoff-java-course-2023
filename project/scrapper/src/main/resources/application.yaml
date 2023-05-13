@@ -13,7 +13,7 @@ springdoc:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/scrapper
+    url: jdbc:postgresql://host.docker.internal:5433/scrapper
     username: postgres
     password: postgres
   liquibase:
