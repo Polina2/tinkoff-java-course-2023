@@ -43,6 +43,13 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: scrapper.Dockerfile
+  checkstyle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cd project
+          mvn -pl scrapper -am checkstyle:check
   start:
     runs-on: ubuntu-latest
     steps:
