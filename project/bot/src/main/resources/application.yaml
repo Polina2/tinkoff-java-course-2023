@@ -10,6 +10,10 @@ springdoc:
   swagger-ui:
     path: /swagger-ui
 
+spring:
+  application:
+    name: bot
+
 management:
   server:
     port: 8181
