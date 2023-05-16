@@ -21,7 +21,7 @@ public class UserMessageProcessorTest {
                     new HelpCommand(null), new ListCommand(null),
                     new StartCommand(null), new TrackCommand(null),
                     new UntrackCommand(null)
-            )
+            ), null
     );
 
     @Mock
