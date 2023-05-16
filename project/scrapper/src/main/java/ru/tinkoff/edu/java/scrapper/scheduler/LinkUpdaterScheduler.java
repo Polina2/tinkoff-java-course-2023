@@ -6,13 +6,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.link_parser.LinkParser;
-import ru.tinkoff.edu.java.scrapper.client.BotClient;
 import ru.tinkoff.edu.java.scrapper.client.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.client.StackOverflowClient;
 import ru.tinkoff.edu.java.scrapper.dto.*;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Link;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.TgChat;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
+import ru.tinkoff.edu.java.scrapper.service.LinkUpdater;
 import ru.tinkoff.edu.java.scrapper.service.TgChatService;
 
 import java.net.URI;
@@ -32,7 +32,7 @@ public class LinkUpdaterScheduler {
     private final LinkService linkService;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
-    private final BotClient botClient;
+    private final LinkUpdater linkUpdater;
     private final LinkParser linkParser;
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
@@ -49,14 +49,14 @@ public class LinkUpdaterScheduler {
                 GitHubReposResponse ghResponse = gitHubClient.getRepository(res).block();
                 GitHubCommitResponse ghcResponse = gitHubClient.getLastCommit(res).blockFirst();
                 if (link.last_update() == null || !ghResponse.updatedAt().toInstant().equals(link.last_update().toInstant())){
-                    botClient.sendUpdate(new LinkUpdate(
+                    linkUpdater.update(new LinkUpdate(
                             link.id(), URI.create(link.url()), "new push to "+ghResponse.name(), tgChatIds
                     ));
                     linkService.updateLink(link, Timestamp.valueOf(ghResponse.updatedAt().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
                             link.update_info());
                 }
                 if (!ghcResponse.sha().equals(link.update_info())){
-                    botClient.sendUpdate(new LinkUpdate(
+                    linkUpdater.update(new LinkUpdate(
                             link.id(), URI.create(link.url()), "new commit: "+ghcResponse.commit().message(), tgChatIds
                     ));
                     linkService.updateLink(link, Timestamp.valueOf(ghResponse.updatedAt().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),
@@ -69,10 +69,10 @@ public class LinkUpdaterScheduler {
                         .toList());
                 if (link.last_update() == null || !time.toInstant().equals(link.last_update().toInstant())){
                     if (link.update_info()==null || soResponse.items().size() != Integer.parseInt(link.update_info())){
-                        botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
+                        linkUpdater.update(new LinkUpdate(link.id(), URI.create(link.url()),
                                 "new answer", tgChatIds));
                     } else {
-                        botClient.sendUpdate(new LinkUpdate(link.id(), URI.create(link.url()),
+                        linkUpdater.update(new LinkUpdate(link.id(), URI.create(link.url()),
                                 "answer updated", tgChatIds));
                     }
                     linkService.updateLink(link, Timestamp.valueOf(time.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()),

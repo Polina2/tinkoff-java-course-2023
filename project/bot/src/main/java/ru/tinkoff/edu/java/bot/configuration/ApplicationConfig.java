@@ -6,5 +6,5 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
-public record ApplicationConfig (@NotNull String test, String token, String baseUrl) {
+public record ApplicationConfig (@NotNull String test, String token, String baseUrl, RabbitMQProperties rabbitmq) {
 }
