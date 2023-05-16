@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.bot.api;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.api.command.Command;
@@ -13,8 +14,10 @@ import java.util.List;
 public class UserMessageProcessor {
 
     private final List<Command> commands;
+    private final Counter userMessageCounter;
 
     public SendMessage process(Update update){
+        userMessageCounter.increment();
         return new SendMessage(update.message().chat().id(), createReply(update));
     }
 
