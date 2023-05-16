@@ -51,6 +51,7 @@ jobs:
           cd project
           mvn -pl scrapper -am checkstyle:check
   start:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

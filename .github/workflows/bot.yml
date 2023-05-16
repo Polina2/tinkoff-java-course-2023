@@ -52,6 +52,7 @@ jobs:
           cd project
           mvn -pl bot -am checkstyle:check
   start:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: log in to container registry
