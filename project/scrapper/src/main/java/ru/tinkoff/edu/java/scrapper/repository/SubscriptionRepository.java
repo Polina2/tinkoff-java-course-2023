@@ -1,15 +1,14 @@
 package ru.tinkoff.edu.java.scrapper.repository;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.dto.db_dto.Subscription;
 
-import java.util.List;
-
 @Repository
 @RequiredArgsConstructor
-public class SubscriptionRepository implements IRepository<Subscription>{
+public class SubscriptionRepository implements IRepository<Subscription> {
 
     private final JdbcTemplate jdbcTemplate;
 

@@ -15,6 +15,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>19</maven.compiler.source>
     <maven.compiler.target>19</maven.compiler.target>
+      <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
   </properties>
 
   <dependencyManagement>
@@ -58,7 +59,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-	
+
 	<dependency>
 	  <groupId>org.jetbrains</groupId>
 	  <artifactId>annotations</artifactId>
@@ -66,9 +67,20 @@
 	  <scope>provided</scope>
 	</dependency>
   </dependencies>
-        
-  
-  
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
   <build>
 
     <pluginManagement>

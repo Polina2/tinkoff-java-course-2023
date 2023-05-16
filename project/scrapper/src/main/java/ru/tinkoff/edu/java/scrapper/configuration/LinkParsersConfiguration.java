@@ -10,7 +10,7 @@ import ru.tinkoff.edu.java.link_parser.StackOverflowLinkParser;
 public class LinkParsersConfiguration {
 
     @Bean
-    public LinkParser linkParser(){
+    public LinkParser linkParser() {
         return new StackOverflowLinkParser(new GitHubLinkParser());
     }
 }

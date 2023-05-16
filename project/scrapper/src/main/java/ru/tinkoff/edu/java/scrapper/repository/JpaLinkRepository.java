@@ -1,11 +1,10 @@
 package ru.tinkoff.edu.java.scrapper.repository;
 
+import java.sql.Timestamp;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.tinkoff.edu.java.scrapper.entity.Link;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 public interface JpaLinkRepository extends JpaRepository<Link, Long> {
 

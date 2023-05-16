@@ -7,7 +7,7 @@ import ru.tinkoff.edu.java.scrapper.scheduler.Scheduler;
 
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
-public record ApplicationConfig (
+public record ApplicationConfig(
         @NotNull String test, Scheduler scheduler,
         String gitBaseUrl, String stackoverflowBaseUrl, String botBaseUrl,
         AccessType databaseAccessType

@@ -8,16 +8,12 @@ import ru.tinkoff.edu.java.bot.configuration.ApplicationConfig;
 
 @SpringBootApplication
 @EnableConfigurationProperties(ApplicationConfig.class)
-public class BotApplication
-{
-    public static void main( String[] args )
-    {
+public class BotApplication {
+    public static void main(String[] args) {
         var ctx = SpringApplication.run(BotApplication.class, args);
         ApplicationConfig config = ctx.getBean(ApplicationConfig.class);
-        //BotImplementation bot = new BotImplementation(config.token());
         BotImplementation bot = ctx.getBean(BotImplementation.class);
         bot.setToken(config.token());
         bot.start();
-        System.out.println(config);
     }
 }

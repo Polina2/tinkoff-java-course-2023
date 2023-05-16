@@ -15,42 +15,40 @@ import ru.tinkoff.edu.java.bot.dto.RemoveLinkRequest;
 public class ScrapperClient {
 
     private final WebClient webClient;
+    private static final String TG_CHAT_PATH = "/tg-chat/{id}";
+    private static final String LINK_PATH = "/links";
+    private static final String TG_CHAT_ID_HEADER = "Tg-Chat-Id";
 
-    public void addChat(Long id){
-        String path = "/tg-chat/{id}";
-        webClient.post().uri(path, id).retrieve().bodyToMono(Void.class).subscribe();
+    public void addChat(Long id) {
+        webClient.post().uri(TG_CHAT_PATH, id).retrieve().bodyToMono(Void.class).subscribe();
     }
 
-    public void deleteChat(Long id){
-        String path = "/tg-chat/{id}";
-        webClient.delete().uri(path, id).retrieve().bodyToMono(Void.class).subscribe();
+    public void deleteChat(Long id) {
+        webClient.delete().uri(TG_CHAT_PATH, id).retrieve().bodyToMono(Void.class).subscribe();
     }
 
-    public Mono<LinkResponse> addLink(Long tgChatId, AddLinkRequest addLinkRequest){
-        String path = "/links";
+    public Mono<LinkResponse> addLink(Long tgChatId, AddLinkRequest addLinkRequest) {
         return webClient.post()
-                .uri(path)
-                .header("Tg-Chat-Id", tgChatId.toString())
+                .uri(LINK_PATH)
+                .header(TG_CHAT_ID_HEADER, tgChatId.toString())
                 .bodyValue(addLinkRequest)
                 .retrieve()
                 .bodyToMono(LinkResponse.class);
     }
 
-    public Mono<LinkResponse> deleteLink(Long tgChatId, RemoveLinkRequest removeLinkRequest){
-        String path = "/links";
+    public Mono<LinkResponse> deleteLink(Long tgChatId, RemoveLinkRequest removeLinkRequest) {
         return webClient.method(HttpMethod.DELETE)
-                .uri(path)
-                .header("Tg-Chat-Id", tgChatId.toString())
+                .uri(LINK_PATH)
+                .header(TG_CHAT_ID_HEADER, tgChatId.toString())
                 .bodyValue(removeLinkRequest)
                 .retrieve()
                 .bodyToMono(LinkResponse.class);
     }
 
-    public Mono<ListLinksResponse> getLinks(Long tgChatId){
-        String path = "/links";
+    public Mono<ListLinksResponse> getLinks(Long tgChatId) {
         return webClient.get()
-                .uri(path)
-                .header("Tg-Chat-Id", tgChatId.toString())
+                .uri(LINK_PATH)
+                .header(TG_CHAT_ID_HEADER, tgChatId.toString())
                 .retrieve()
                 .bodyToMono(ListLinksResponse.class);
     }

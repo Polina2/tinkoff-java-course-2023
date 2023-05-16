@@ -9,7 +9,7 @@ import ru.tinkoff.edu.java.bot.dto.ListLinksResponse;
 
 @Component
 @RequiredArgsConstructor
-public class ListCommand implements Command{
+public class ListCommand implements Command {
 
     private final ScrapperClient client;
 
@@ -24,17 +24,17 @@ public class ListCommand implements Command{
     }
 
     @Override
-    public String createReply(Update update){
+    public String createReply(Update update) {
         ListLinksResponse response = client.getLinks(update.message().chat().id()).block();
         return createReply(response);
     }
 
-    public String createReply(ListLinksResponse response){
+    public String createReply(ListLinksResponse response) {
         boolean hasLinks = response.links().size() > 0;
         StringBuilder text = new StringBuilder();
-        if (hasLinks){
+        if (hasLinks) {
             text.append("Отслеживаемые ссылки:");
-            for (LinkResponse linkResponse : response.links()){
+            for (LinkResponse linkResponse : response.links()) {
                 text.append('\n').append(linkResponse.url());
             }
         } else {

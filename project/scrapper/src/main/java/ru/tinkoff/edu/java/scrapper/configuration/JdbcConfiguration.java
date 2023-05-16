@@ -1,12 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import javax.sql.DataSource;
 
 @Configuration
 public class JdbcConfiguration {
@@ -19,12 +18,12 @@ public class JdbcConfiguration {
     private String password;
 
     @Bean
-    JdbcTemplate jdbcTemplate(DataSource dataSource){
+    JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
     @Bean
-    DataSource dataSource(){
+    DataSource dataSource() {
         DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.postgresql.Driver");
         dataSourceBuilder.url(url);

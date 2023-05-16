@@ -20,12 +20,12 @@ public class JdbcAccessConfiguration {
             LinkRepository linkRepository,
             SubscriptionRepository subscriptionRepository,
             TgChatRepository tgChatRepository
-    ){
+    ) {
         return new JdbcLinkService(linkRepository, subscriptionRepository, tgChatRepository);
     }
 
     @Bean
-    public TgChatService tgChatService(TgChatRepository tgChatRepository){
+    public TgChatService tgChatService(TgChatRepository tgChatRepository) {
         return new JdbcTgChatService(tgChatRepository);
     }
 }

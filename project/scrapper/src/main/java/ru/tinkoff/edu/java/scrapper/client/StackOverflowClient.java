@@ -12,8 +12,8 @@ public class StackOverflowClient {
 
     private final WebClient stackOverflowWebClient;
 
-    public Mono<ListAnswersResponse> getAnswers(String questionId){
-        String path = "/2.3/questions/"+ questionId +"/answers?site=stackoverflow";
+    public Mono<ListAnswersResponse> getAnswers(String questionId) {
+        String path = "/2.3/questions/" + questionId + "/answers?site=stackoverflow";
         Mono<ListAnswersResponse> response = stackOverflowWebClient.get()
                 .uri(path)
                 .retrieve()
