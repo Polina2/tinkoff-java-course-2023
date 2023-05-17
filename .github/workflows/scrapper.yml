@@ -63,4 +63,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GIT_DOCKER_PAT }}
       - run: docker pull ghcr.io/polina2/tinkoff-java-course-2023/scrapper:hw8
-      - run: docker run --name scrapper --network=resources_backend ghcr.io/polina2/tinkoff-java-course-2023/scrapper:hw8
+      - name: Authenticate and deploy to Kubernetes
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: kubectl apply -f deployment-scrapper.yml
